@@ -1,12 +1,10 @@
-package com.JEEproject.Backend.Projections;
+package com.JEEproject.Backend.DTOs;
 
 import com.JEEproject.Backend.Enums.TrackingStatus;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Date;
 
 @Getter
 @Setter

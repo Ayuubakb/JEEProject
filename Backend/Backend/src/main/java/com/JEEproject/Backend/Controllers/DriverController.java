@@ -2,15 +2,16 @@ package com.JEEproject.Backend.Controllers;
 
 import com.JEEproject.Backend.Models.Agency;
 import com.JEEproject.Backend.Models.Driver;
-import com.JEEproject.Backend.Projections.DriverFilters;
-import com.JEEproject.Backend.Projections.DriverProjection;
+import com.JEEproject.Backend.DTOs.DriverFilters;
+import com.JEEproject.Backend.DTOs.DriverDto;
 import com.JEEproject.Backend.Repositories.AgencyRepository;
 import com.JEEproject.Backend.Repositories.DriverRepository;
 import com.JEEproject.Backend.Templates.FiltersTemplates;
-import com.JEEproject.Backend.Utils;
+import com.JEEproject.Backend.services.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -28,10 +29,12 @@ public class DriverController {
     Utils utils;
 
     ResponseEntity<String> stringInternalError= new ResponseEntity<>("Something Went Wrong", HttpStatus.INTERNAL_SERVER_ERROR);
-    ResponseEntity<List<DriverProjection>> listInternalError= new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
-    ResponseEntity<DriverProjection> driverInternalError= new ResponseEntity<>(new DriverProjection(), HttpStatus.INTERNAL_SERVER_ERROR);
+    ResponseEntity<List<DriverDto>> listInternalError= new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+    ResponseEntity<DriverDto> driverInternalError= new ResponseEntity<>(new DriverDto(), HttpStatus.INTERNAL_SERVER_ERROR);
     @Autowired
     private FiltersTemplates filtersTemplates;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @PostMapping("/save")
     public ResponseEntity<String> addDriver(@RequestBody Driver driver){
@@ -45,7 +48,7 @@ public class DriverController {
             }
             if(agency.isEmpty())
                 return new ResponseEntity<>("Agency Not Found",HttpStatus.NOT_FOUND);
-            Driver driverInstance=new Driver(driver.getFirst_name(), driver.getLast_name(), driver.getEmail(), driver.getPassword(), driver.getDriver_type(),agency.get());
+            Driver driverInstance=new Driver(driver.getFirst_name(), driver.getLast_name(), driver.getEmail(),  passwordEncoder.encode(driver.getPassword()), driver.getDriver_type(),agency.get());
             try {
                 driverRepo.save(driverInstance);
             } catch (Exception e) {
@@ -57,7 +60,7 @@ public class DriverController {
     }
 
     @GetMapping("/get/id/{id}")
-    public ResponseEntity<DriverProjection> getDriverById(@PathVariable int id){
+    public ResponseEntity<DriverDto> getDriverById(@PathVariable int id){
         Optional<Driver> driver;
         try{
             driver=driverRepo.findById(id);
@@ -65,15 +68,15 @@ public class DriverController {
             return driverInternalError;
         }
         if(driver.isEmpty())
-            return new ResponseEntity<>(new DriverProjection(),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new DriverDto(),HttpStatus.NOT_FOUND);
         List<Driver> tmp=new ArrayList<>();
         tmp.add(driver.get());
         return new ResponseEntity<>(utils.generateDriverProjection(tmp).getFirst(),HttpStatus.OK);
     }
 
     @PostMapping("/get")
-    public ResponseEntity<List<DriverProjection>> getDrivers(@RequestBody DriverFilters filters){
-        List<DriverProjection> drivers;
+    public ResponseEntity<List<DriverDto>> getDrivers(@RequestBody DriverFilters filters){
+        List<DriverDto> drivers;
         try{
             drivers=filtersTemplates.getDrivers(filters);
         } catch (Exception e) {

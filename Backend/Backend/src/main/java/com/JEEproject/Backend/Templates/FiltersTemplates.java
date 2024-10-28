@@ -1,13 +1,11 @@
 package com.JEEproject.Backend.Templates;
 
-import com.JEEproject.Backend.Models.Order;
-import com.JEEproject.Backend.Projections.*;
+import com.JEEproject.Backend.DTOs.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -35,7 +33,7 @@ public class FiltersTemplates {
             "INNER JOIN users u ON u.id_user=o.id_client) " +
             "INNER JOIN agencies a ON u.id_agency=a.id_agency) ";
 
-    public List<UserProjection> getManagers(ManagerFilters filters){
+    public List<UserDto> getManagers(ManagerFilters filters){
         String query=managerQuery;
        if(filters.getCity()!=null)
            query+=" AND city='"+filters.getCity()+"'";
@@ -45,9 +43,9 @@ public class FiltersTemplates {
            String tmp= filters.getSortByDate().toUpperCase();
            query += " ORDER BY add_date "+tmp;
        }
-       return jdbcTemplate.query(query,new BeanPropertyRowMapper<UserProjection>(UserProjection.class));
+       return jdbcTemplate.query(query,new BeanPropertyRowMapper<UserDto>(UserDto.class));
     }
-    public List<ClientProjection> getClients(ClientFilters filters){
+    public List<ClientDto> getClients(ClientFilters filters){
         String query=clientQuery;
         if(filters.getCity()!=null)
             query+=" AND city='"+filters.getCity()+"'";
@@ -62,9 +60,9 @@ public class FiltersTemplates {
             String tmp= filters.getSortByDate().toUpperCase();
             query += " ORDER BY COUNT(o.id_order) "+tmp;
         }
-        return jdbcTemplate.query(query,new BeanPropertyRowMapper<ClientProjection>(ClientProjection.class));
+        return jdbcTemplate.query(query,new BeanPropertyRowMapper<ClientDto>(ClientDto.class));
     }
-    public List<DriverProjection> getDrivers(DriverFilters filters){
+    public List<DriverDto> getDrivers(DriverFilters filters){
         String query=driverQuery;
         if(!filters.getIs_available().isEmpty())
             query+=" AND is_available='"+filters.getIs_available()+"'";
@@ -79,9 +77,9 @@ public class FiltersTemplates {
             String tmp=filters.getSortByMissions().toUpperCase();
             query += " ORDER BY COUNT(m.id_mission) "+tmp;
         }
-        return jdbcTemplate.query(query, new BeanPropertyRowMapper<DriverProjection>(DriverProjection.class));
+        return jdbcTemplate.query(query, new BeanPropertyRowMapper<DriverDto>(DriverDto.class));
     }
-    public List<OrderProjection> getOrders(OrderFilters orderFilters){
+    public List<OrderDto> getOrders(OrderFilters orderFilters){
         String query=orderQuery;
         boolean whereAdded=false;
         boolean orderByAdded=false;
@@ -107,6 +105,6 @@ public class FiltersTemplates {
                 query+=" ,";
             query+=" o.priority "+orderFilters.getSortByPriority().toUpperCase();
         }
-        return jdbcTemplate.query(query,new BeanPropertyRowMapper<OrderProjection>(OrderProjection.class));
+        return jdbcTemplate.query(query,new BeanPropertyRowMapper<OrderDto>(OrderDto.class));
     }
 }

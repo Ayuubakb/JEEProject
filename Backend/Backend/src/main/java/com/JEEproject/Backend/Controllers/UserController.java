@@ -2,13 +2,13 @@ package com.JEEproject.Backend.Controllers;
 
 import com.JEEproject.Backend.Enums.Roles;
 import com.JEEproject.Backend.Models.*;
-import com.JEEproject.Backend.Projections.UserProjection;
+import com.JEEproject.Backend.DTOs.UserDto;
 import com.JEEproject.Backend.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.JEEproject.Backend.Utils;
+import com.JEEproject.Backend.services.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class UserController {
     Utils utils;
 
     @GetMapping("/get")
-    public ResponseEntity<List<UserProjection>> getAllUsers(){
+    public ResponseEntity<List<UserDto>> getAllUsers(){
         List<User> users=new ArrayList<>();
         try{
             users=userRepo.findAll();
@@ -41,7 +41,7 @@ public class UserController {
     }
 
     @GetMapping("/get/role/{role}")
-    public ResponseEntity<List<UserProjection>> getUserByRole(@PathVariable Roles role){
+    public ResponseEntity<List<UserDto>> getUserByRole(@PathVariable Roles role){
         List<User> users;
         try{
             users=userRepo.findByRole(role);

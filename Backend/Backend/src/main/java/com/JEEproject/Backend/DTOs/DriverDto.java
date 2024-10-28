@@ -1,4 +1,4 @@
-package com.JEEproject.Backend.Projections;
+package com.JEEproject.Backend.DTOs;
 
 import com.JEEproject.Backend.Enums.Cities;
 import com.JEEproject.Backend.Enums.MissionType;
@@ -12,14 +12,14 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class DriverProjection extends UserProjection{
+public class DriverDto extends UserDto {
     @Enumerated(EnumType.STRING)
     private MissionType driver_type ;
     private Boolean is_available;
     private int numMissions;
 
-    public DriverProjection(){}
-    public DriverProjection(
+    public DriverDto(){}
+    public DriverDto(
             int id_user,
             String first_name,
             String last_name,

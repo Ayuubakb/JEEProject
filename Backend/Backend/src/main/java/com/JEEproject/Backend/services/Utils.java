@@ -1,12 +1,11 @@
-package com.JEEproject.Backend;
+package com.JEEproject.Backend.services;
 
-import com.JEEproject.Backend.Enums.Cities;
 import com.JEEproject.Backend.Enums.Roles;
 import com.JEEproject.Backend.Models.*;
-import com.JEEproject.Backend.Projections.AgencyProjection;
-import com.JEEproject.Backend.Projections.ClientProjection;
-import com.JEEproject.Backend.Projections.DriverProjection;
-import com.JEEproject.Backend.Projections.UserProjection;
+import com.JEEproject.Backend.DTOs.AgencyDto;
+import com.JEEproject.Backend.DTOs.ClientDto;
+import com.JEEproject.Backend.DTOs.DriverDto;
+import com.JEEproject.Backend.DTOs.UserDto;
 import com.JEEproject.Backend.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,10 +26,10 @@ public class Utils {
         int c=userRepo.checkEmailForUpdate(email,id);
         return c>0;
     }
-    public List<UserProjection> generateUserProjection(List<User> users){
-        List<UserProjection> userProjection=new ArrayList<>();
+    public List<UserDto> generateUserProjection(List<User> users){
+        List<UserDto> userDto =new ArrayList<>();
         users.forEach(u ->{
-            UserProjection up=new UserProjection(
+            UserDto up=new UserDto(
                     u.getId_user(),
                     u.getFirst_name(),
                     u.getLast_name(),
@@ -40,15 +39,15 @@ public class Utils {
                     u.getAgency().getId_agency(),
                     u.getAgency().getCity()
             );
-            userProjection.add(up);
+            userDto.add(up);
         });
-        return userProjection;
+        return userDto;
     }
 
-    public List<ClientProjection> generateClientProjection(List<Client> clients){
-        List<ClientProjection> clientProjections=new ArrayList<>();
+    public List<ClientDto> generateClientProjection(List<Client> clients){
+        List<ClientDto> clientDtos =new ArrayList<>();
         clients.forEach(c ->{
-            ClientProjection client=new ClientProjection(
+            ClientDto client=new ClientDto(
                     c.getId_user(),
                     c.getFirst_name(),
                     c.getLast_name(),
@@ -62,15 +61,15 @@ public class Utils {
                     c.getBalance(),
                     c.getOrders().size()
             );
-            clientProjections.add(client);
+            clientDtos.add(client);
         });
-        return clientProjections;
+        return clientDtos;
     }
 
-    public List<DriverProjection> generateDriverProjection(List<Driver> drivers){
-        List<DriverProjection> driverProjections=new ArrayList<>();
+    public List<DriverDto> generateDriverProjection(List<Driver> drivers){
+        List<DriverDto> driverDtos =new ArrayList<>();
         drivers.forEach(d ->{
-            DriverProjection driver=new DriverProjection(
+            DriverDto driver=new DriverDto(
                 d.getId_user(),
                 d.getFirst_name(),
                 d.getLast_name(),
@@ -83,13 +82,13 @@ public class Utils {
                 d.getIs_available(),
                 d.getMissions().size()
             );
-            driverProjections.add(driver);
+            driverDtos.add(driver);
         });
-        return driverProjections;
+        return driverDtos;
     }
 
-    public List<AgencyProjection> generateAgencyProjection(List<Agency> agencies){
-        List<AgencyProjection> agencyProjections=new ArrayList<>();
+    public List<AgencyDto> generateAgencyProjection(List<Agency> agencies){
+        List<AgencyDto> agencyDtos =new ArrayList<>();
         agencies.forEach(a ->{
             List<User> users=a.getUsers();
             int numManagers = 0;
@@ -106,7 +105,7 @@ public class Utils {
                         numClients++;
                 }
             };
-            AgencyProjection ap=new AgencyProjection(
+            AgencyDto ap=new AgencyDto(
                 a.getId_agency(),
                 a.getAddress(),
                 a.getCity(),
@@ -114,8 +113,8 @@ public class Utils {
                 numDrivers,
                 numClients
             );
-            agencyProjections.add(ap);
+            agencyDtos.add(ap);
         });
-        return agencyProjections;
+        return agencyDtos;
     }
 }

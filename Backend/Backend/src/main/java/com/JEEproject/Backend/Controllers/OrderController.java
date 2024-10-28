@@ -1,14 +1,12 @@
 package com.JEEproject.Backend.Controllers;
 
-import com.JEEproject.Backend.Enums.TrackingStatus;
 import com.JEEproject.Backend.Models.Order;
-import com.JEEproject.Backend.Projections.OrderFilters;
-import com.JEEproject.Backend.Projections.OrderProjection;
+import com.JEEproject.Backend.DTOs.OrderFilters;
+import com.JEEproject.Backend.DTOs.OrderDto;
 import com.JEEproject.Backend.Repositories.OrderRepository;
 import com.JEEproject.Backend.Templates.FiltersTemplates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,8 +42,8 @@ public class OrderController {
     }
 
     @PostMapping("/get")
-    public ResponseEntity<List<OrderProjection>> getOrders(@RequestBody OrderFilters orderFilters){
-        List<OrderProjection> orders;
+    public ResponseEntity<List<OrderDto>> getOrders(@RequestBody OrderFilters orderFilters){
+        List<OrderDto> orders;
         try {
             orders= filtersTemplates.getOrders(orderFilters);
         }catch (Exception e) {

@@ -2,9 +2,9 @@ package com.JEEproject.Backend.Controllers;
 
 import com.JEEproject.Backend.Enums.Cities;
 import com.JEEproject.Backend.Models.Agency;
-import com.JEEproject.Backend.Projections.AgencyProjection;
+import com.JEEproject.Backend.DTOs.AgencyDto;
 import com.JEEproject.Backend.Repositories.AgencyRepository;
-import com.JEEproject.Backend.Utils;
+import com.JEEproject.Backend.services.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +23,8 @@ public class AgencyController {
     Utils utils;
 
     ResponseEntity<String> stringInternalError= new ResponseEntity<>("Something Went Wrong", HttpStatus.INTERNAL_SERVER_ERROR);
-    ResponseEntity<List<AgencyProjection>> listInternalError= new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
-    ResponseEntity<AgencyProjection> agencyInternalError= new ResponseEntity<>(new AgencyProjection(), HttpStatus.INTERNAL_SERVER_ERROR);
+    ResponseEntity<List<AgencyDto>> listInternalError= new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+    ResponseEntity<AgencyDto> agencyInternalError= new ResponseEntity<>(new AgencyDto(), HttpStatus.INTERNAL_SERVER_ERROR);
 
     @PostMapping("/save")
     public ResponseEntity<String> addAgency(@RequestBody Agency agency){
@@ -44,7 +44,7 @@ public class AgencyController {
         return new ResponseEntity<>("Agency Added",HttpStatus.CREATED);
     }
     @GetMapping("/get")
-    public ResponseEntity<List<AgencyProjection>> getAllAgencies(){
+    public ResponseEntity<List<AgencyDto>> getAllAgencies(){
         List<Agency> agencies;
         try {
             agencies=agencyRepo.findAll();
@@ -54,7 +54,7 @@ public class AgencyController {
         return new ResponseEntity<>(utils.generateAgencyProjection(agencies),HttpStatus.OK);
     }
     @GetMapping("/get/city/{city}")
-    public ResponseEntity<AgencyProjection> getAgencyByCity(@PathVariable Cities city){
+    public ResponseEntity<AgencyDto> getAgencyByCity(@PathVariable Cities city){
         Optional<Agency> agency;
         try {
             agency=agencyRepo.findAgencyByCity(city);
@@ -64,13 +64,13 @@ public class AgencyController {
         if(agency.isPresent()) {
             List<Agency> agencies=new ArrayList<>();
             agencies.add(agency.get());
-            AgencyProjection result=utils.generateAgencyProjection(agencies).getFirst();
+            AgencyDto result=utils.generateAgencyProjection(agencies).getFirst();
             return new ResponseEntity<>(result, HttpStatus.OK);
         }else
-            return new ResponseEntity<>(new AgencyProjection(),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new AgencyDto(),HttpStatus.NOT_FOUND);
     }
     @GetMapping("/get/sort/{sort}")
-    public ResponseEntity<List<AgencyProjection>> getSortedAgencies(@PathVariable String sort){
+    public ResponseEntity<List<AgencyDto>> getSortedAgencies(@PathVariable String sort){
         List<Agency> agencies;
         if(sort.equalsIgnoreCase("asc"))
             try {
@@ -89,7 +89,7 @@ public class AgencyController {
         return new ResponseEntity<>(utils.generateAgencyProjection(agencies),HttpStatus.OK);
     }
     @GetMapping("/get/id/{id}")
-    public ResponseEntity<AgencyProjection> getAgencyById(@PathVariable int id){
+    public ResponseEntity<AgencyDto> getAgencyById(@PathVariable int id){
         Optional<Agency> agency;
         try{
             agency=agencyRepo.findById(id);
@@ -97,7 +97,7 @@ public class AgencyController {
             return agencyInternalError;
         }
         if(agency.isEmpty())
-            return  new ResponseEntity<>(new AgencyProjection(),HttpStatus.NOT_FOUND);
+            return  new ResponseEntity<>(new AgencyDto(),HttpStatus.NOT_FOUND);
         List<Agency> tmp=new ArrayList<>();
         tmp.add(agency.get());
         return new ResponseEntity<>(utils.generateAgencyProjection(tmp).getFirst(),HttpStatus.OK);

@@ -1,7 +1,6 @@
-package com.JEEproject.Backend.Projections;
+package com.JEEproject.Backend.DTOs;
 
 import com.JEEproject.Backend.Enums.Cities;
-import com.JEEproject.Backend.Enums.MissionType;
 import lombok.Getter;
 import lombok.Setter;
 

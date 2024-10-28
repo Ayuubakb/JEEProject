@@ -1,13 +1,9 @@
-package com.JEEproject.Backend.Projections;
+package com.JEEproject.Backend.DTOs;
 
 import com.JEEproject.Backend.Enums.Cities;
-import com.JEEproject.Backend.Enums.MissionType;
 import com.JEEproject.Backend.Enums.Roles;
-import com.JEEproject.Backend.Models.Agency;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +11,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class UserProjection {
+public class UserDto {
     private int id_user;
     private String first_name;
     private String last_name;
@@ -27,8 +23,8 @@ public class UserProjection {
     @Enumerated(EnumType.STRING)
     private Cities city;
 
-    public UserProjection(){}
-    public UserProjection(int id_user, String first_name, String last_name, String email, Roles role, Date add_date, int id_agency, Cities city){
+    public UserDto(){}
+    public UserDto(int id_user, String first_name, String last_name, String email, Roles role, Date add_date, int id_agency, Cities city){
         this.id_user=id_user;
         this.first_name=first_name;
         this.last_name=last_name;

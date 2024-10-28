@@ -1,7 +1,6 @@
-package com.JEEproject.Backend.Projections;
+package com.JEEproject.Backend.DTOs;
 
 import com.JEEproject.Backend.Enums.Cities;
-import com.JEEproject.Backend.Enums.MissionType;
 import com.JEEproject.Backend.Enums.Roles;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,14 +9,14 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class ClientProjection extends UserProjection{
+public class ClientDto extends UserDto {
     private String company;
     private String address;
     private float balance;
     private int numOrders;
 
-    public  ClientProjection(){}
-    public ClientProjection(
+    public ClientDto(){}
+    public ClientDto(
             int id_user,
             String first_name,
             String last_name,
