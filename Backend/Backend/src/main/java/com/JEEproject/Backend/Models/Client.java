@@ -25,7 +25,7 @@ public class Client extends User {
 
     @OneToMany(mappedBy = "user")
     private List<Order> Orders=new ArrayList<>();
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "client")
     private List<Transaction> transactions=new ArrayList<>();
 
     public Client() {}
