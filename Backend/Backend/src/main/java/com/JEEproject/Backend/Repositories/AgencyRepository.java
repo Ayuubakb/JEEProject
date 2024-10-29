@@ -18,5 +18,7 @@ public interface AgencyRepository extends JpaRepository<Agency,Integer> {
     @Query("select a from Agency a left join a.users u group by a order by count(u) ASC")
     List<Agency> sortAgenciesAsc();
 
+    List<Agency> findAll();
+
     Optional<Agency> findById(int id);
 }

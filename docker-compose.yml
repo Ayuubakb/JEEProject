@@ -1,0 +1,49 @@
+services:
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+    environment:
+      - REACT_APP_SERVER_URI= ${REACT_APP_SERVER_URI}
+      - REACT_APP_CLIENT_URI= ${REACT_APP_CLIENT_URI}
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend
+    networks:
+      - JEEnetwork
+  backend:
+    container_name: backend
+    build: 
+      context: ./Backend/Backend
+    ports:
+      - 8080:8080
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/JEEproject"
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+    depends_on:
+      - db
+    networks:
+      - JEEnetwork
+  db:
+    container_name: db
+    image: postgres:17-alpine
+    ports:
+      - 5432:5432
+    networks:
+      - JEEnetwork
+    volumes:
+      - JEEvolume:/var/lib/postgresql/data
+      - ./JEEdb.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      POSTGRES_DB: JEEproject
+volumes:
+  JEEvolume : 
+    driver : local
+networks:
+  JEEnetwork : 
+    driver: bridge
+    
