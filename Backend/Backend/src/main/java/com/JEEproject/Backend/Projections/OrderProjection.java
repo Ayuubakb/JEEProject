@@ -3,18 +3,13 @@ package com.JEEproject.Backend.Projections;
 import com.JEEproject.Backend.Enums.Cities;
 import com.JEEproject.Backend.Enums.OrderType;
 import com.JEEproject.Backend.Enums.TrackingStatus;
-import com.JEEproject.Backend.Models.Mission;
-import com.JEEproject.Backend.Models.Receiver;
-import com.JEEproject.Backend.Models.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter

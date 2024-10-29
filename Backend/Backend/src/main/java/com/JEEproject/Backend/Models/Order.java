@@ -9,7 +9,7 @@ import lombok.Setter;
 import java.util.*;
 
 @Entity
-@Table(name="orders")
+@Table(name = "orders")
 @Getter
 @Setter
 public class Order {
@@ -17,16 +17,21 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idOrder;
     private Date date;
+
     @Enumerated(value = EnumType.STRING)
     private TrackingStatus tracking_status;
+
     @Enumerated(value = EnumType.STRING)
     private OrderType orderType;
+
     private float price;
     private int priority;
     private int weight;
+
     @ManyToOne
-    @JoinColumn(name = "id_client")
-    private User user;
+    @JoinColumn(name = "id_client")  // Ensure this column refers to Client's ID
+    private Client client;  // Changed to Client instead of User
+
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = "mission_details",
@@ -34,19 +39,21 @@ public class Order {
             inverseJoinColumns = {@JoinColumn(name = "id_mission")}
     )
     public List<Mission> missions = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "id_receiver")
     private Receiver receiver;
 
     public Order() {}
-    public Order(OrderType orderType, float price, int priority,User user, int weight, Receiver receiver) {
+
+    public Order(OrderType orderType, float price, int priority, Client client, int weight, Receiver receiver) {
         this.date = new Date();
-        this.tracking_status=TrackingStatus.CollectingFromSender;
-        this.orderType=orderType;
-        this.price=price;
-        this.priority=priority;
-        this.user=user;
-        this.weight=weight;
-        this.receiver=receiver;
+        this.tracking_status = TrackingStatus.CollectingFromSender;
+        this.orderType = orderType;
+        this.price = price;
+        this.priority = priority;
+        this.client = client;  // Changed to client
+        this.weight = weight;
+        this.receiver = receiver;
     }
 }
