@@ -67,4 +67,23 @@ public class OrderController {
             return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @PutMapping("/updateIsAborted/{id}/{isAborted}")
+    public ResponseEntity<String> updateIsAborted(@PathVariable int id, @PathVariable boolean isAborted) {
+        try {
+            Order order = orderRepo.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+            order.setIs_aborted(isAborted);  // Ensure this method exists in the Order class
+            orderRepo.save(order);
+            return new ResponseEntity<>("is_aborted status updated successfully.", HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("/all")
+    public ResponseEntity<List<OrderProjection>> getAllOrders() {
+        List<OrderProjection> orders = orderRepo.findAllOrdersProjections();
+        return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+
 }

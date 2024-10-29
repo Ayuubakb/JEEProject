@@ -31,7 +31,7 @@ public class MissionController {
     private final DriverRepository driverRepo;
 
     @Autowired
-    public MissionController(OrderRepository orderRepo, MissionRepository missionRepo,DriverRepository driverRepo) {
+    public MissionController(OrderRepository orderRepo, MissionRepository missionRepo, DriverRepository driverRepo) {
         this.orderRepo = orderRepo;
         this.missionRepo = missionRepo;
         this.driverRepo = driverRepo;
@@ -41,26 +41,15 @@ public class MissionController {
     public void calculateAndUpdatePriority(Order order) {
         // Determine index based on order type
         int index = (order.getOrderType() == OrderType.Express) ? 3 : 1;
-        int status = (order.getTracking_status() == TrackingStatus.CollectingFromSender) ? 2 : 1;
+        int status = (order.getTracking_status() == TrackingStatus.CollectingFromSender || order.getTracking_status() == TrackingStatus.InCollectingAgency) ? 2 : 1;
 
-        // Calculate the time difference in days between the current date and the order's creation date
+        // Calculate the time difference in minutes between the current date and the order's creation date
         Instant creationInstant = order.getDate().toInstant();
         Instant currentInstant = new Date().toInstant();
-        long daysDifference = (Duration.between(creationInstant, currentInstant).toMinutes());
-
-        // Debugging prints to trace values
-        System.out.println("Calculating priority for Order ID: " + order.getIdOrder());
-        System.out.println("Order Type: " + order.getOrderType());
-        System.out.println("Tracking Status: " + order.getTracking_status());
-        System.out.println("Days Difference: " + daysDifference);
-        System.out.println("Index: " + index);
-        System.out.println("Status: " + status);
+        long minutesDifference = Duration.between(creationInstant, currentInstant).toMinutes();
 
         // Calculate priority based on the formula
-        int priority = (int) (2 * daysDifference * index * status);
-
-        // Debugging print for calculated priority
-        System.out.println("Calculated Priority: " + priority);
+        int priority = (int) (2 * minutesDifference * index * status);
 
         // Update and save the order with the new priority
         order.setPriority(priority);
@@ -72,15 +61,11 @@ public class MissionController {
     public ResponseEntity<String> updatePrioritiesByCity(@PathVariable Cities city) {
         try {
             // Fetch all orders matching the tracking status and city conditions
-            List<Order> orders = orderRepo.findOrdersForPriorityUpdate(
+            List<Order> orders = orderRepo.findLocalOrders(
                     TrackingStatus.CollectingFromSender,
-                    TrackingStatus.Aborted,
                     TrackingStatus.DeliveringToReceiver,
                     city
             );
-
-            // Debugging print for the number of orders fetched
-            System.out.println("Number of orders fetched for city " + city + ": " + orders.size());
 
             // Update each order's priority
             for (Order order : orders) {
@@ -92,13 +77,14 @@ public class MissionController {
             return new ResponseEntity<>("Failed to update priorities: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @PostMapping("/createMission/{city}/{driverId}")
     public ResponseEntity<String> createMission(@PathVariable Cities city, @PathVariable int driverId) {
         updatePrioritiesByCity(city);
         try {
             // Fetch orders based on tracking statuses, city, and priority
-            List<Order> orders = orderRepo.findOrdersForMissionCreation(
-                    city, TrackingStatus.CollectingFromSender, TrackingStatus.DeliveringToReceiver, TrackingStatus.Aborted
+            List<Order> orders = orderRepo.findLocalOrders(
+                    TrackingStatus.CollectingFromSender, TrackingStatus.DeliveringToReceiver, city
             );
 
             // Sort orders by priority descending
@@ -137,6 +123,69 @@ public class MissionController {
             return new ResponseEntity<>("Mission created successfully with " + selectedOrders.size() + " orders.", HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>("Failed to create mission: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // Endpoint to update priorities of foreign orders
+    @PutMapping("/updateForeignPriorities/{cityFrom}/{cityTo}")
+    public ResponseEntity<String> updateForeignPriorities(@PathVariable Cities cityFrom, @PathVariable Cities cityTo) {
+        if (cityFrom == cityTo) {
+            return new ResponseEntity<>("Error: From city cannot be the same as to city.", HttpStatus.BAD_REQUEST);
+        }
+        try {
+            List<Order> orders = orderRepo.findForeignOrders(cityFrom, cityTo);
+
+            for (Order order : orders) {
+                calculateAndUpdatePriority(order);
+            }
+
+            return new ResponseEntity<>("Priorities updated successfully for selected foreign orders from " + cityFrom + " to " + cityTo, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Failed to update foreign priorities: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/createForeignMission/{cityFrom}/{cityTo}/{driverId}")
+    public ResponseEntity<String> createForeignMission(@PathVariable Cities cityFrom, @PathVariable Cities cityTo, @PathVariable int driverId) {
+        if (cityFrom == cityTo) {
+            return new ResponseEntity<>("Error: From city cannot be the same as to city.", HttpStatus.BAD_REQUEST);
+        }
+        updateForeignPriorities(cityFrom, cityTo);
+        try {
+            List<Order> orders = orderRepo.findForeignOrders(cityFrom, cityTo);
+
+            orders.sort(Comparator.comparingInt(Order::getPriority).reversed());
+
+            List<Order> selectedOrders = new ArrayList<>();
+            int totalWeight = 0;
+
+            for (Order order : orders) {
+                if (totalWeight + order.getWeight() <= 3000) {
+                    selectedOrders.add(order);
+                    totalWeight += order.getWeight();
+                } else {
+                    break;
+                }
+            }
+
+            Driver driver = driverRepo.findById(driverId).orElseThrow(() -> new RuntimeException("Driver not found"));
+            Mission mission = new Mission(
+                    0,
+                    false,
+                    MissionType.Inter_agency, // Change mission type to Foreign
+                    new Date(),
+                    null,
+                    cityFrom,
+                    cityTo,
+                    driver,
+                    selectedOrders
+            );
+
+            missionRepo.save(mission);
+
+            return new ResponseEntity<>("Foreign mission created successfully with " + selectedOrders.size() + " orders.", HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Failed to create foreign mission: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

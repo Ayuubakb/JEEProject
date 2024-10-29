@@ -27,6 +27,7 @@ public class Order {
     private float price;
     private int priority;
     private int weight;
+    private boolean is_aborted;  // New field added
 
     @ManyToOne
     @JoinColumn(name = "id_client")  // Ensure this column refers to Client's ID
@@ -54,6 +55,15 @@ public class Order {
         this.priority = priority;
         this.client = client;  // Changed to client
         this.weight = weight;
+        this.is_aborted = false;  // Default to false for new orders
         this.receiver = receiver;
+    }
+
+    public void setIs_aborted(boolean isAborted) {
+        this.is_aborted = isAborted;
+    }
+
+    public boolean getIs_aborted() {
+        return this.is_aborted;
     }
 }
