@@ -1,16 +1,16 @@
 package com.JEEproject.Backend.Converters;
 
 import com.JEEproject.Backend.Models.Order;
-import com.JEEproject.Backend.Projections.OrderProjection;
+import com.JEEproject.Backend.DTOs.OrderDto;
 
 public class OrderConverter {
 
-    public static OrderProjection toProjection(Order order) {
+    public static OrderDto toProjection(Order order) {
         if (order == null) {
             return null; // Handle null order case
         }
 
-        return new OrderProjection(
+        return new OrderDto(
                 order.getIdOrder(),
                 order.getDate(),
                 order.getTracking_status(),

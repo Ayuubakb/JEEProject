@@ -1,11 +1,8 @@
 package com.JEEproject.Backend.services;
 
+import com.JEEproject.Backend.DTOs.*;
 import com.JEEproject.Backend.Enums.Roles;
 import com.JEEproject.Backend.Models.*;
-import com.JEEproject.Backend.DTOs.AgencyDto;
-import com.JEEproject.Backend.DTOs.ClientDto;
-import com.JEEproject.Backend.DTOs.DriverDto;
-import com.JEEproject.Backend.DTOs.UserDto;
 import com.JEEproject.Backend.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -116,5 +113,31 @@ public class Utils {
             agencyDtos.add(ap);
         });
         return agencyDtos;
+    }
+
+    public List<OrderDto> generateOrderProjection(List<Order> orders){
+        List<OrderDto> orderDtos =new ArrayList<>();
+        orders.forEach(order ->{
+            OrderDto tmp=new OrderDto(
+                    order.getIdOrder(),
+                    order.getDate(),
+                    order.getTracking_status(),
+                    order.getOrderType(),
+                    order.getPrice(),
+                    order.getPriority(),
+                    order.getWeight(),
+                    order.getClient().getId_user(), // Assuming getClient() returns the client entity
+                    order.getReceiver().getId_receiver(), // Assuming getReceiver() returns the receiver entity
+                    order.getIs_aborted(),
+                    order.getClient().getCompany(), // Assuming getClient() has a getCompany() method
+                    order.getReceiver().getFullname(), // Assuming getReceiver() has a getName() method
+                    order.getClient().getAgency().getCity(), // Assuming getAgency() returns the agency entity
+                    order.getReceiver().getCity(), // Assuming getReceiver() has a getCity() method
+                    order.getClient().getAddress(), // Assuming getClient() has a getAddress() method
+                    order.getReceiver().getAddress() // Assuming getReceiver() has a getAddress() method
+            );
+            orderDtos.add(tmp);
+        });
+        return orderDtos;
     }
 }

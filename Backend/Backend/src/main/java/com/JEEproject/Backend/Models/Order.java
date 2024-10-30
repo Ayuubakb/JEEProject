@@ -31,7 +31,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "id_client")  // Ensure this column refers to Client's ID
-    private Client client;  // Changed to Client instead of User
+        private Client client;  // Changed to Client instead of User
 
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(

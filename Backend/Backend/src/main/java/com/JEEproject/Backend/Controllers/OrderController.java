@@ -11,6 +11,7 @@ import com.JEEproject.Backend.Repositories.ClientRepository;
 import com.JEEproject.Backend.Repositories.OrderRepository;
 import com.JEEproject.Backend.Repositories.ReceiverRepository;
 import com.JEEproject.Backend.Templates.FiltersTemplates;
+import com.JEEproject.Backend.services.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,8 @@ public class OrderController {
 
     @Autowired
     private ClientRepository clientRepo; // Add your Client repository here
+    @Autowired
+    private Utils utils;
 
 
     private float calculatePrice(float weight, Receiver receiver, Client client ) {
@@ -131,9 +134,9 @@ public class OrderController {
         }
     }
     @GetMapping("/all")
-    public ResponseEntity<List<OrderProjection>> getAllOrders() {
-        List<OrderProjection> orders = orderRepo.findAllOrdersProjections();
-        return new ResponseEntity<>(orders, HttpStatus.OK);
+    public ResponseEntity<List<OrderDto>> getAllOrders() {
+        List<Order> orders = orderRepo.findAll();
+        return new ResponseEntity<>(utils.generateOrderProjection(orders), HttpStatus.OK);
     }
 
 }
