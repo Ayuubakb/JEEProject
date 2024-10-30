@@ -3,9 +3,10 @@ package com.JEEproject.Backend.Models;
 import com.JEEproject.Backend.Enums.Cities;
 import com.JEEproject.Backend.Enums.MissionType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 
 import java.util.*;
-
+@AllArgsConstructor
 @Entity
 @Table(name = "missions")
 public class Mission {
@@ -23,7 +24,12 @@ public class Mission {
     @ManyToOne
     @JoinColumn(name = "id_driver")
     public Driver driver;
-    @ManyToMany(mappedBy = "missions")
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "mission_details",
+            joinColumns = {@JoinColumn(name = "id_mission")},
+            inverseJoinColumns = {@JoinColumn(name = "id_order")}
+    )
     public List<Order> Orders = new ArrayList<>();
 
     public Mission(){}

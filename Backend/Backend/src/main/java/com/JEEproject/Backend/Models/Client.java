@@ -23,7 +23,7 @@ public class Client extends User {
     private String address;
     private Float balance;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "client")
     private List<Order> Orders=new ArrayList<>();
     @OneToMany(mappedBy = "client")
     private List<Transaction> transactions=new ArrayList<>();

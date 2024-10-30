@@ -18,19 +18,29 @@ import java.util.Date;
 public class OrderDto {
     private int idOrder;
     private Date date;
+
     @Enumerated(value = EnumType.STRING)
     private TrackingStatus tracking_status;
+
     @Enumerated(value = EnumType.STRING)
     private OrderType orderType;
+
     private float price;
     private int priority;
     private int weight;
     private int id_client;
     private int id_receiver;
+    private boolean is_aborted;
     private String company;
     private String receiver;
+
     @Enumerated(value = EnumType.STRING)
     private Cities from;
+
     @Enumerated(value = EnumType.STRING)
     private Cities to;
+
+    // New fields for addresses
+    private String clientAddress;
+    private String receiverAddress;
 }
