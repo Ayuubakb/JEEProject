@@ -33,7 +33,7 @@ public class SecurityConfiguration {
         http.cors().and().csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/**", "/client/save","/manager/save","/driver/save")
+                .requestMatchers("/auth/**", "/client/save", "/manager/save", "/driver/save", "/client/get/**", "/agency/get")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -53,12 +53,12 @@ public class SecurityConfiguration {
 
         configuration.setAllowCredentials(true);
         configuration.setAllowedOrigins(List.of("http://localhost:3000"));
-        configuration.setAllowedMethods(List.of("GET","POST","PUT","DELETE"));
-        configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-        source.registerCorsConfiguration("/**",configuration);
+        source.registerCorsConfiguration("/**", configuration);
 
         return source;
     }
