@@ -1,0 +1,111 @@
+.progress-bar {
+    flex: 1;
+    height: 4px;
+    background-color: #e9ecef; /* Couleur neutre pour la barre de progression */
+    border-radius: 2px;
+    margin: 0 5px; /* Espace entre les étapes */
+}
+
+.progress-bar-container {
+    display: flex; /* Utiliser flexbox pour centrer les cercles */
+    justify-content: center; /* Centrer horizontalement */
+    align-items: center; /* Centrer verticalement */
+  }
+  
+  .step-circle {
+    display: inline-block; /* Assurer que les cercles sont traités comme des éléments inline */
+    border: 2px solid none; /* Couleur de bordure, ajustez selon vos besoins */
+    border-radius: 50%; /* Faire les cercles */
+    text-align: center; /* Centrer le texte à l'intérieur du cercle */
+    font-weight: bold; /* Mettre le texte en gras */
+  }
+  
+  .step-line {
+    width: 40px; /* Ajustez la largeur de la ligne */
+    height: 2px; /* Épaisseur de la ligne */
+    background-color: #007bff; /* Couleur de la ligne */
+    margin: 0; /* Réduire les marges */
+  }
+  
+.step-circle.completed {
+    background-color: #28a745; /* Vert pour les étapes complètes */
+}
+
+.step-circle.active {
+    border: 2px solid #007bff; /* Bordure bleue pour l'étape active */
+}
+
+.text-danger {
+    margin-top: 5px; /* Espace supérieur pour le message d'erreur */
+}
+
+.step-button-group {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.password-toggle-icon {
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #000;
+}
+body {
+    background-color: #f5f5f5;
+  }
+  
+  .register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding-top: 20px;
+  }
+  
+  .card {
+    max-width: 600px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .step-button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .password-toggle-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+  .register-step1-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: auto;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem; /* Espace entre les éléments pour une meilleure lisibilité */
+}
+
+.register-container .register-card {
+    max-width: 600px;
+    margin: auto;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.text-danger {
+    font-size: 0.875rem;
+    color: red;
+    margin-top: 5px;
+}
