@@ -1,15 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  TextField,
-  Button,
-  Grid,
-  InputAdornment,
-  Typography,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-} from '@mui/material';
+import { TextField, Button, Grid, InputAdornment, Typography, MenuItem } from '@mui/material';
 import BusinessIcon from '@mui/icons-material/Business';
 import HomeIcon from '@mui/icons-material/Home';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -18,17 +8,18 @@ import axios from 'axios';
 const Step2 = ({ formData, handleInputChange, prevStep, nextStep }) => {
   const [agencies, setAgencies] = useState([]);
 
+  // Fetch agencies on component mount
   useEffect(() => {
     const fetchAgencies = async () => {
       try {
-        const response = await axios.get(`/agency/get`);
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_URI}/agency/get`);
         setAgencies(response.data);
       } catch (error) {
-        console.error('Error fetching agencies', error);
+        console.error('Failed to fetch agencies', error);
       }
     };
     fetchAgencies();
-  });
+  }, []);
 
   return (
     <Grid
@@ -90,36 +81,30 @@ const Step2 = ({ formData, handleInputChange, prevStep, nextStep }) => {
           }}
         />
       </Grid>
-
-      {/* Dropdown for selecting agency */}
       <Grid
         item
         xs={12}
       >
-        <FormControl
+        <TextField
+          select
           fullWidth
+          label='Agence'
+          name='agencyId'
+          value={formData.agencyId || ''}
+          onChange={handleInputChange}
           variant='outlined'
           margin='normal'
         >
-          <InputLabel>Agence</InputLabel>
-          <Select
-            label='Agence'
-            name='agencyId'
-            value={formData.agencyId || ''} // Ensure agencyId is part of formData
-            onChange={handleInputChange}
-          >
-            {agencies.map(agency => (
-              <MenuItem
-                key={agency.id}
-                value={agency.id}
-              >
-                {agency.city}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+          {agencies.map(agency => (
+            <MenuItem
+              key={agency.id_agency}
+              value={agency.id_agency}
+            >
+              {agency.city} - {agency.address}
+            </MenuItem>
+          ))}
+        </TextField>
       </Grid>
-
       <Grid
         item
         xs={12}
@@ -137,9 +122,7 @@ const Step2 = ({ formData, handleInputChange, prevStep, nextStep }) => {
             alignItems: 'center',
             justifyContent: 'center',
             borderRadius: '8px',
-            ':hover': {
-              backgroundColor: 'rgba(0, 128, 0, 0.1)',
-            },
+            ':hover': { backgroundColor: 'rgba(0, 128, 0, 0.1)' },
           }}
           startIcon={<ArrowBackIcon />}
         >
@@ -153,9 +136,7 @@ const Step2 = ({ formData, handleInputChange, prevStep, nextStep }) => {
             width: '45%',
             backgroundColor: 'green',
             borderRadius: '8px',
-            ':hover': {
-              backgroundColor: '#006400',
-            },
+            ':hover': { backgroundColor: '#006400' },
           }}
         >
           Suivant

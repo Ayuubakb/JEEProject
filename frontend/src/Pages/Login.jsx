@@ -27,7 +27,7 @@ const Login = () => {
             toast.error(errorText, {
               position: "top-center",
               transition: Slide,
-              autoClose: 5000,
+              autoClose: 1000,
               style: {
                 backgroundColor: '#f8d7da',
                 color: '#721c24',
@@ -39,7 +39,7 @@ const Login = () => {
             toast.success("Connexion réussie !", {
               position: "top-center",
               transition: Zoom,
-              autoClose: 3000,
+              autoClose: 1000,
               onClose: () => {
                 const userId = res.userId;
                 if (res.role === "Client") {
@@ -63,7 +63,7 @@ const Login = () => {
         } else {
           toast.warn("Veuillez remplir tous les champs.", {
             position: "top-center",
-            autoClose: 3000,
+            autoClose: 1000,
             style: {
               backgroundColor: '#fff3cd',
               color: '#856404',

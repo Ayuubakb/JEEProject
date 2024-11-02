@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Button, Card, CardContent, Container, Typography, Box } from '@mui/material';
+import { Card, CardContent, Container, Typography, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 import logo from '../assets/img/brand/COLLIFAST.png';
-import backgroundImage from '../assets/img/brand/background.jpg';
+// import backgroundImage from '../assets/img/brand/background.jpg';
 import Step1 from '../components/Steps/Step1';
 import Step2 from '../components/Steps/Step2';
 import Step3 from '../components/Steps/Step3';
@@ -26,6 +26,7 @@ const Register = () => {
     address: '',
     password: '',
     confirmPassword: '',
+    agencyId: '', // Add agencyId field
   });
 
   const handleInputChange = e => {
@@ -61,7 +62,7 @@ const Register = () => {
     e.preventDefault();
     if (validatePassword()) {
       try {
-        const response = await axios.post(
+        await axios.post(
           `${process.env.REACT_APP_SERVER_URI}/client/save`,
           {
             first_name: formData.firstName,
@@ -71,6 +72,7 @@ const Register = () => {
             role: 'Client',
             company: formData.companyName,
             address: formData.address,
+            agency: { id_agency: formData.agencyId }, // Wrap id_agency in agency object
           },
           {
             headers: { 'Content-Type': 'application/json' },
@@ -80,7 +82,7 @@ const Register = () => {
         toast.success('Inscription réussie ! Vous allez être redirigé vers la page de connexion.', {
           position: 'top-center',
           transition: Zoom,
-          autoClose: 4000,
+          autoClose: 1000,
           onClose: () => {
             window.location.href = '/auth/login';
           },
@@ -102,7 +104,7 @@ const Register = () => {
           toast.error(newErrorMessage, {
             position: 'top-center',
             transition: Slide,
-            autoClose: 5000,
+            autoClose: 1000,
             style: {
               backgroundColor: '#f8d7da',
               color: '#721c24',
@@ -115,7 +117,7 @@ const Register = () => {
     } else {
       toast.warn('Les mots de passe ne correspondent pas.', {
         position: 'top-center',
-        autoClose: 3000,
+        autoClose: 1000,
         style: {
           backgroundColor: '#fff3cd',
           color: '#856404',
