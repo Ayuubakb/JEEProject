@@ -12,10 +12,14 @@ const Commande = () => {
   useEffect(() => {
     const fetchClientCity = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_SERVER_URI}/client/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setClientCity(response.data.agency.city); // Assuming the agency object has a city field
+        const response = await axios.get(
+          `${process.env.REACT_APP_SERVER_URI}/client/get/id/${userId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        console.log('Client response:', response.data.city);
+        setClientCity(response.data.city);
       } catch (error) {
         console.error("Error fetching client's city:", error);
       }
@@ -73,6 +77,41 @@ const Commande = () => {
     calculatePrice();
   }, [orderData.weight, orderData.receiver.city, orderData.orderType]);
 
+  // const handleSubmit = async e => {
+  //   e.preventDefault();
+  //   const clientId = localStorage.getItem('userId');
+  //   const token = localStorage.getItem('accessToken');
+
+  //   const orderPayload = {
+  //     ...orderData,
+  //     client: { id_user: clientId },
+  //     priority: 0,
+  //     tracking_status: '',
+  //     receiver: {
+  //       ...orderData.receiver,
+  //     },
+  //   };
+
+  //   try {
+  //     const receiverResponse = await axios.post(
+  //       `${process.env.REACT_APP_SERVER_URI}/receiver/save`,
+  //       orderData.receiver,
+  //       {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       }
+  //     );
+
+  //     orderPayload.receiver.id_receiver = receiverResponse.data;
+
+  //     await axios.post(`${process.env.REACT_APP_SERVER_URI}/order/save`, orderPayload, {
+  //       headers: { Authorization: `Bearer ${token}` },
+  //     });
+  //     alert('Order created successfully');
+  //   } catch (error) {
+  //     console.error('Error submitting order:', error);
+  //   }
+  // };
+
   const handleSubmit = async e => {
     e.preventDefault();
     const clientId = localStorage.getItem('userId');
@@ -88,28 +127,61 @@ const Commande = () => {
     };
 
     try {
-      const receiverResponse = await axios.post(
-        `${process.env.REACT_APP_SERVER_URI}/receiver/save`,
-        orderData.receiver,
+      // Check if a receiver with the same email already exists
+      const existingReceiverResponse = await axios.get(
+        `${process.env.REACT_APP_SERVER_URI}/receiver/get/mail/${orderData.receiver.email}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      alert('Receiver submitted successfully');
 
-      orderPayload.receiver.id_receiver = receiverResponse.data;
+      let receiverId;
 
+      if (existingReceiverResponse.data && existingReceiverResponse.data.id_receiver) {
+        // Update existing receiver if found
+        receiverId = existingReceiverResponse.data.id_receiver;
+        await axios.put(
+          `${process.env.REACT_APP_SERVER_URI}/receiver/update/${receiverId}`,
+          orderData.receiver,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+      } else {
+        // Create a new receiver if not found
+        const receiverResponse = await axios.post(
+          `${process.env.REACT_APP_SERVER_URI}/receiver/save`,
+          orderData.receiver,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        receiverId = receiverResponse.data;
+      }
+
+      // Add receiver ID to order payload
+      orderPayload.receiver.id_receiver = receiverId;
+
+      // Save the order
       await axios.post(`${process.env.REACT_APP_SERVER_URI}/order/save`, orderPayload, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      alert('Order submitted successfully');
+      alert('Order created successfully');
     } catch (error) {
       console.error('Error submitting order:', error);
     }
   };
 
   return (
-    <Box sx={{ padding: '20px', marginTop: '64px' }}>
+    <Box
+      sx={{
+        padding: '40px',
+        margin: '60px',
+        backgroundColor: 'white',
+        borderRadius: '8px',
+        boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+      }}
+    >
       <Typography
         variant='h4'
         sx={{ fontWeight: 'bold', mb: 3 }}
@@ -119,7 +191,7 @@ const Commande = () => {
 
       {/* Live price display */}
       <Typography
-        variant='h6'
+        variant='h5'
         color='primary'
       >
         Estimated Price: {price.toFixed(2)} MAD

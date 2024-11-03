@@ -1,16 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, IconButton, InputBase, Menu, MenuItem, Tooltip, Fade } from '@mui/material';
+import {
+  Box,
+  IconButton,
+  InputBase,
+  Menu,
+  MenuItem,
+  Tooltip,
+  Fade,
+  Typography,
+} from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
 import logo from '../../assets/img/brand/COLLIFAST.png';
+import axios from 'axios';
 
 const Navbar = ({ sidebarExpanded }) => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [balance, setBalance] = useState(null);
+  const userId = localStorage.getItem('userId');
+  const token = localStorage.getItem('accessToken');
 
-  const handleMenuOpen = (event) => {
+  useEffect(() => {
+    const fetchBalance = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_SERVER_URI}/client/get/id/${userId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setBalance(response.data.balance);
+      } catch (error) {
+        console.error('Error fetching balance:', error);
+      }
+    };
+
+    fetchBalance();
+  }, [userId, token]);
+
+  const handleMenuOpen = event => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -19,42 +50,78 @@ const Navbar = ({ sidebarExpanded }) => {
   };
 
   return (
-    <Box sx={{ 
-        ...styles.navbar, 
-        width: sidebarExpanded ? 'calc(100% - 250px)' : '100%', 
-        left: sidebarExpanded ? '250px' : '0' 
+    <Box
+      sx={{
+        ...styles.navbar,
+        width: sidebarExpanded ? 'calc(100% - 250px)' : '100%',
+        left: sidebarExpanded ? '250px' : '0',
       }}
     >
       <Box sx={styles.logoContainer}>
-        {sidebarExpanded && <img src={logo} alt="Logo COLLIFAST" style={styles.logo} />}
+        {sidebarExpanded && (
+          <img
+            src={logo}
+            alt='Logo COLLIFAST'
+            style={styles.logo}
+          />
+        )}
       </Box>
 
-      <Box sx={{
-        ...styles.searchContainer,
-        marginLeft: sidebarExpanded ? 'auto' : '30px',
-      }}>
+      <Box
+        sx={{
+          ...styles.searchContainer,
+          marginLeft: sidebarExpanded ? 'auto' : '30px',
+        }}
+      >
         <InputBase
-          placeholder="Recherche..."
+          placeholder='Recherche...'
           startAdornment={<SearchIcon sx={styles.searchIcon} />}
           sx={styles.searchInput}
         />
       </Box>
 
       <Box sx={styles.userSection}>
-        <Tooltip title="Notifications" arrow TransitionComponent={Fade} TransitionProps={{ timeout: 600 }}>
+        {balance !== null && (
+          <Typography
+            variant='subtitle1'
+            sx={{ marginRight: '20px', fontWeight: 'bold', color: '#FFD808', fontSize: '18px' }}
+          >
+            Balance: {balance} MAD
+          </Typography>
+        )}
+
+        <Tooltip
+          title='Notifications'
+          arrow
+          TransitionComponent={Fade}
+          TransitionProps={{ timeout: 600 }}
+        >
           <IconButton sx={styles.icon}>
             <NotificationsIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Paramètres" arrow TransitionComponent={Fade} TransitionProps={{ timeout: 600 }}>
+        <Tooltip
+          title='Paramètres'
+          arrow
+          TransitionComponent={Fade}
+          TransitionProps={{ timeout: 600 }}
+        >
           <IconButton sx={styles.icon}>
             <SettingsIcon />
           </IconButton>
         </Tooltip>
 
-        <Tooltip title="Compte Utilisateur" arrow TransitionComponent={Fade} TransitionProps={{ timeout: 600 }}>
-          <Box sx={styles.userInfo} onClick={handleMenuOpen}>
-            <AccountCircleIcon sx={styles.userIcon} />                                      
+        <Tooltip
+          title='Compte Utilisateur'
+          arrow
+          TransitionComponent={Fade}
+          TransitionProps={{ timeout: 600 }}
+        >
+          <Box
+            sx={styles.userInfo}
+            onClick={handleMenuOpen}
+          >
+            <AccountCircleIcon sx={styles.userIcon} />
           </Box>
         </Tooltip>
 
@@ -64,9 +131,27 @@ const Navbar = ({ sidebarExpanded }) => {
           onClose={handleMenuClose}
           PaperProps={{ sx: styles.menu }}
         >
-          <MenuItem onClick={handleMenuClose} component={Link} to="/profile">Profil</MenuItem>
-          <MenuItem onClick={handleMenuClose} component={Link} to="/change-password">Changer Mot de Passe</MenuItem>
-          <MenuItem onClick={handleMenuClose} component={Link} to="/auth/logout">Déconnexion</MenuItem>
+          <MenuItem
+            onClick={handleMenuClose}
+            component={Link}
+            to='/profile'
+          >
+            Profil
+          </MenuItem>
+          <MenuItem
+            onClick={handleMenuClose}
+            component={Link}
+            to='/change-password'
+          >
+            Changer Mot de Passe
+          </MenuItem>
+          <MenuItem
+            onClick={handleMenuClose}
+            component={Link}
+            to='/auth/logout'
+          >
+            Déconnexion
+          </MenuItem>
         </Menu>
       </Box>
     </Box>

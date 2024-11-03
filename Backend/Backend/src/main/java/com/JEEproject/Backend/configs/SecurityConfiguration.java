@@ -33,7 +33,7 @@ public class SecurityConfiguration {
         http.cors().and().csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/**", "/client/save", "/manager/save", "/driver/save", "/client/get/**", "/agency/get")
+                .requestMatchers("/auth/**", "/client/save", "/manager/save", "/driver/save", "/client/get/**", "/agency/get", "/bank/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
