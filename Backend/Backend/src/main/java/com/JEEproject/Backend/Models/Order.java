@@ -6,7 +6,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -31,7 +33,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "id_client")  // Ensure this column refers to Client's ID
-        private Client client;  // Changed to Client instead of User
+    private Client client;  // Changed to Client instead of User
 
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
@@ -45,11 +47,12 @@ public class Order {
     @JoinColumn(name = "id_receiver")
     private Receiver receiver;
 
-    public Order() {}
+    public Order() {
+    }
 
     public Order(OrderType orderType, float price, int priority, Client client, int weight, Receiver receiver) {
         this.date = new Date();
-        this.tracking_status = TrackingStatus.CollectingFromSender;
+        this.tracking_status = TrackingStatus.ProcessingOrder;
         this.orderType = orderType;
         this.price = price;
         this.priority = priority;

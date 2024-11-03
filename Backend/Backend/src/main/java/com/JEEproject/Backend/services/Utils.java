@@ -183,4 +183,24 @@ public class Utils {
         });
         return orderDtos;
     }
+
+    public List<BankDto> generateBankProjection(List<Bank> banks) {
+        List<BankDto> bankDtos = new ArrayList<>();
+        banks.forEach(bank -> {
+            BankDto tmp = new BankDto(
+                    bank.getId_bank(),
+                    bank.getUser().getId_user(), // Assuming getUser() returns the user entity
+                    bank.getName(),
+                    bank.getAddress(),
+                    bank.getCardnum(),
+                    bank.getCvv(),
+                    bank.getExpiry_y(),
+                    bank.getExpiry_y(),
+                    bank.getBalance()
+            );
+            bankDtos.add(tmp);
+        });
+        return bankDtos;
+    }
+
 }

@@ -20,13 +20,22 @@ const GestionCredits = () => {
         }
       );
       alert(response.data); // Alert success message
+      window.location.reload();
     } catch (error) {
       alert('Error updating balance');
     }
   };
 
   return (
-    <Box sx={{ padding: '20px', marginTop: '64px' }}>
+    <Box
+      sx={{
+        padding: '40px',
+        margin: '60px',
+        backgroundColor: 'white',
+        borderRadius: '8px',
+        boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+      }}
+    >
       <Typography
         variant='h4'
         sx={{ fontWeight: 'bold', mb: 3 }}
