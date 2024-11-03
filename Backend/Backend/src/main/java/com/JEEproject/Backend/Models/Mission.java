@@ -1,11 +1,15 @@
 package com.JEEproject.Backend.Models;
 
+import com.JEEproject.Backend.Converters.CitiesConverter;
 import com.JEEproject.Backend.Enums.Cities;
 import com.JEEproject.Backend.Enums.MissionType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 @AllArgsConstructor
 @Entity
 @Table(name = "missions")
@@ -18,7 +22,11 @@ public class Mission {
     public MissionType mission_type;
     public Date start_date;
     public Date end_date;
+
+    @Convert(converter = CitiesConverter.class)
     public Cities from_city;
+
+    @Convert(converter = CitiesConverter.class)
     public Cities to_city;
 
     @ManyToOne
@@ -32,8 +40,10 @@ public class Mission {
     )
     public List<Order> Orders = new ArrayList<>();
 
-    public Mission(){}
-    public Mission(MissionType mission_type, Cities From,Cities To) {
+    public Mission() {
+    }
+
+    public Mission(MissionType mission_type, Cities From, Cities To) {
         this.is_done = false;
         this.mission_type = mission_type;
         this.start_date = new Date();
