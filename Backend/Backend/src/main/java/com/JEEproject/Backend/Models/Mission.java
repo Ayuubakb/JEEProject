@@ -3,6 +3,8 @@ package com.JEEproject.Backend.Models;
 import com.JEEproject.Backend.Converters.CitiesConverter;
 import com.JEEproject.Backend.Enums.Cities;
 import com.JEEproject.Backend.Enums.MissionType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 
@@ -31,6 +33,7 @@ public class Mission {
 
     @ManyToOne
     @JoinColumn(name = "id_driver")
+    @JsonBackReference // Évite la boucle en ne sérialisant pas cette référence
     public Driver driver;
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
@@ -38,6 +41,8 @@ public class Mission {
             joinColumns = {@JoinColumn(name = "id_mission")},
             inverseJoinColumns = {@JoinColumn(name = "id_order")}
     )
+    @JsonManagedReference // Gère la sérialisation de la liste des ordres
+
     public List<Order> Orders = new ArrayList<>();
 
     public Mission() {

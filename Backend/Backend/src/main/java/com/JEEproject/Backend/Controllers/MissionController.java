@@ -8,9 +8,8 @@ import com.JEEproject.Backend.Models.Driver;
 import com.JEEproject.Backend.Models.Mission;
 import com.JEEproject.Backend.Models.Order;
 import com.JEEproject.Backend.Repositories.DriverRepository;
-import com.JEEproject.Backend.Repositories.OrderRepository;
 import com.JEEproject.Backend.Repositories.MissionRepository;
-
+import com.JEEproject.Backend.Repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -188,4 +187,25 @@ public class MissionController {
             return new ResponseEntity<>("Failed to create foreign mission: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/driver/{driverId}")
+    public ResponseEntity<List<Mission>> getMissionsByDriverId(@PathVariable int driverId) {
+        try {
+            // Récupérer le Driver par son ID
+            Driver driver = driverRepo.findById(driverId)
+                    .orElseThrow(() -> new RuntimeException("Driver not found"));
+
+            // Utiliser l'objet Driver pour récupérer les missions
+            List<Mission> missions = missionRepo.findByDriver(driver);
+
+            if (missions.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(missions, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 }
