@@ -1,10 +1,10 @@
 package com.JEEproject.Backend.Repositories;
 
 import com.JEEproject.Backend.Converters.OrderConverter;
+import com.JEEproject.Backend.DTOs.OrderDto;
 import com.JEEproject.Backend.Enums.Cities;
 import com.JEEproject.Backend.Enums.TrackingStatus;
 import com.JEEproject.Backend.Models.Order;
-import com.JEEproject.Backend.Projections.OrderProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -37,7 +37,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     @Query("SELECT o FROM Order o")
     List<Order> findAllOrders(); // Change return type to List<Order>
 
-    default List<OrderProjection> findAllOrdersProjections() {
+    default List<OrderDto> findAllOrdersProjections() {
         List<Order> orders = findAllOrders();
         return orders.stream()
                 .map(OrderConverter::toProjection)

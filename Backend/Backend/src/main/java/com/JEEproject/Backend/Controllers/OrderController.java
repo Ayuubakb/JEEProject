@@ -1,6 +1,7 @@
 package com.JEEproject.Backend.Controllers;
 
 import com.JEEproject.Backend.Enums.Cities;
+import com.JEEproject.Backend.Enums.OrderType;
 import com.JEEproject.Backend.Enums.TrackingStatus;
 import com.JEEproject.Backend.Models.Client;
 import com.JEEproject.Backend.Models.Order;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/order")
@@ -34,7 +34,7 @@ public class OrderController {
     private ClientRepository clientRepo; // Add your Client repository here
 
 
-    private float calculatePrice(float weight, Receiver receiver, Client client ) {
+    private float calculatePrice(float weight, Receiver receiver, Client client, OrderType orderType) {
         // Fetch the complete Receiver and Client from the repository
 
         // Fetch the agency and its city
@@ -45,8 +45,14 @@ public class OrderController {
 
         // Determine price per kg based on the cities
         if (receiverCity.equals(clientCity)) {
+            if(orderType == OrderType.Express)
+                pricePerKg = 30.0f; // Same city and express
+            else
             pricePerKg = 15.0f; // Same city
         } else {
+            if(orderType == OrderType.Express)
+                pricePerKg = 100.0f; // Different cities and express
+            else
             pricePerKg = 50.0f; // Different cities
         }
 
@@ -70,7 +76,8 @@ public class OrderController {
             float calculatedPrice = calculatePrice(
                     order.getWeight(),
                     receiver,
-                    client
+                    client,
+                    order.getOrderType()
             );
 
             // Create the order to save
@@ -131,8 +138,8 @@ public class OrderController {
         }
     }
     @GetMapping("/all")
-    public ResponseEntity<List<OrderProjection>> getAllOrders() {
-        List<OrderProjection> orders = orderRepo.findAllOrdersProjections();
+    public ResponseEntity<List<OrderDto>> getAllOrders() {
+        List<OrderDto> orders = orderRepo.findAllOrdersProjections();
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
