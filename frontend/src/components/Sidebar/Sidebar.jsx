@@ -1,5 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, IconButton } from '@mui/material';
+import { Link, useLocation,useNavigate } from 'react-router-dom';
+import {
+  Box,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+  IconButton,
+} from '@mui/material';
+import { useDispatch,useSelector } from 'react-redux';
 import HomeIcon from '@mui/icons-material/Home';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
@@ -9,36 +20,78 @@ import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import MenuIcon from '@mui/icons-material/Menu';
+import GroupIcon from '@mui/icons-material/Group';
+import SavingsIcon from '@mui/icons-material/Savings';
 import logo from '../../assets/img/brand/COLLIFAST.png';
-import { useDispatch } from 'react-redux';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { logout } from '../../Actions/authAction';
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const dispatch=useDispatch();
   const location = useLocation();
   const sidebarRef = useRef(null);
-
-  const [sidebarExpanded, setSidebarExpanded] = useState(localStorage.getItem("sidebar-expanded") === "true");
-  const userId = localStorage.getItem("userId"); // Récupération de l'ID utilisateur
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate('/auth/login');
-  };
+  const navigate=useNavigate()
+  const role=useSelector(state=>state.authReducer.role);
+  const [sidebarExpanded, setSidebarExpanded] = useState(
+    localStorage.getItem('sidebar-expanded') === 'true'
+  );
+  const [menuToShow,setMenuToShow]=useState([])
+  const userId = localStorage.getItem('userId'); // Récupération de l'ID utilisateur
+  const handleLogout=async()=>{
+    const res=await dispatch(logout())
+    if(res.loggedOut)
+      window.location.href = '/landingPage.html';
+  }
   // Mise à jour des chemins avec l'ID utilisateur
   const menuItems = [
     { text: 'Gestion des Commandes', path: `/client/${userId}`, icon: <HomeIcon /> },
-    { text: 'Nouvelle Commande', path: `/client/${userId}/commande`, icon: <AddShoppingCartIcon /> },
-    { text: 'Suivi de Commande', path: `/client/${userId}/suivi-commande`, icon: <LocalShippingIcon /> },
+    {
+      text: 'Nouvelle Commande',
+      path: `/client/${userId}/commande`,
+      icon: <AddShoppingCartIcon />,
+    },
+    {
+      text: 'Suivi de Commande',
+      path: `/client/${userId}/suivi-commande`,
+      icon: <LocalShippingIcon />,
+    },
     { text: 'Profil', path: `/client/${userId}/profil`, icon: <PersonIcon /> },
-    { text: 'Gestion du Crédit', path: `/client/${userId}/gestion-credit`, icon: <CreditScoreIcon /> },
+    {
+      text: 'Gestion du Crédit',
+      path: `/client/${userId}/gestion-credit`,
+      icon: <CreditScoreIcon />,
+    },
     { text: 'Support', path: `/client/${userId}/support`, icon: <SupportAgentIcon /> },
   ];
+  const menuItemsManager = [
+    { text: 'Tableau de Borde', path: `/manager/${userId}`, icon: <HomeIcon /> },
+    {
+      text: 'Finance',
+      path: `/manager/${userId}/finances`,
+      icon: <SavingsIcon />,
+    },
+    {
+      text: 'Utilisateurs',
+      path: `/manager/${userId}/gestion-utilisateurs`,
+      icon: <GroupIcon />,
+    },
+    { text: 'Profil', path: `/manager/${userId}/profil`, icon: <PersonIcon /> },
+    {
+      text: 'Missions',
+      path: `/manager/${userId}/gestion-colliers-mission`,
+      icon: <LocalShippingIcon />,
+    }
+  ];
+
+  useEffect(()=>{
+    if(role=="Client")
+      setMenuToShow(menuItems)
+    else if(role=="Manager")
+      setMenuToShow(menuItemsManager)
+  },[role])
 
   useEffect(() => {
-    localStorage.setItem("sidebar-expanded", sidebarExpanded);
-    document.body.classList.toggle("sidebar-expanded", sidebarExpanded);
+    localStorage.setItem('sidebar-expanded', sidebarExpanded);
+    document.body.classList.toggle('sidebar-expanded', sidebarExpanded);
   }, [sidebarExpanded]);
 
   return (
@@ -61,11 +114,20 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       </Box>
       <Divider sx={styles.divider} />
       <List>
-        {menuItems.map((item, index) => (
-          <Link to={item.path} style={styles.link} key={index}>
+        {menuToShow.map((item, index) => (
+          <Link
+            to={item.path}
+            style={styles.link}
+            key={index}
+          >
             <ListItem disablePadding>
-              <ListItemButton selected={location.pathname === item.path} sx={styles.listItemButton}>
-                <ListItemIcon sx={{ color: location.pathname === item.path ? '#2563EB' : '#6B7280' }}>
+              <ListItemButton
+                selected={location.pathname === item.path}
+                sx={styles.listItemButton}
+              >
+                <ListItemIcon
+                  sx={{ color: location.pathname === item.path ? '#2563EB' : '#6B7280' }}
+                >
                   {item.icon}
                 </ListItemIcon>
                 {sidebarExpanded && (
@@ -172,3 +234,4 @@ const styles = {
 };
 
 export default Sidebar;
+

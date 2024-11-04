@@ -136,7 +136,7 @@ public class ClientController {
         }
         return new ResponseEntity<>("Client Updated", HttpStatus.OK);
     }
-    
+
     @PutMapping("/update/{id}/{balance}")
     public ResponseEntity<String> updateClientBalance(@PathVariable int id, @PathVariable float balance) {
         Optional<Client> client;
@@ -147,8 +147,11 @@ public class ClientController {
         }
         if (client.isEmpty())
             return new ResponseEntity<>("Client not found", HttpStatus.NOT_FOUND);
+
+
         Client tmp = client.get();
-        tmp.setBalance(balance);
+        tmp.setBalance(tmp.getBalance() + balance); // Add the input balance to the existing balance
+
         try {
             clientRepo.save(tmp);
         } catch (Exception e) {
@@ -156,4 +159,5 @@ public class ClientController {
         }
         return new ResponseEntity<>("Balance updated", HttpStatus.OK);
     }
+
 }

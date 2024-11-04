@@ -24,9 +24,11 @@ import SupportManager from './Pages/Manager/Support';
 import SuiviLivraisons from './Pages/Manager/SuiviLivraisons';
 
 import LayoutDriver from './layouts/LayoutDriver';
+import LayoutManager from './layouts/LayoutManager'
 import MissionsAVenir from './Pages/Driver/MissionsAVenir';
-import ProfilDriver from './Pages/Driver/ProfilDriver';
+import ConfirmationMission from './Pages/Driver/ConfirmationMission';
 import HistoriqueMissions from './Pages/Driver/HistoriqueMissions';
+import ManagerProfile from './Pages/Manager/ManagerProfile';
 
 function App() {
   if (window.location.pathname === '/') {
@@ -88,7 +90,8 @@ function App() {
 
             {/* Routes Manager Sécurisées */}
             <Route element={<PrivateRoute />}>
-              <Route path='/manager/:id'>
+              <Route path='/manager/:id' element={<LayoutManager/>}>
+
                 <Route
                   index
                   element={<TableauDeBord />}
@@ -96,6 +99,10 @@ function App() {
                 <Route
                   path='finances'
                   element={<Finances />}
+                />
+                <Route
+                  path='profil'
+                  element={<ManagerProfile />}
                 />
                 <Route
                   path='gestion-utilisateurs'

@@ -1,6 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Typography, Box, CircularProgress, Avatar, Paper, Divider, Chip, Stack, TextField, Button, Snackbar, Alert, IconButton, InputAdornment, Grid, Select, MenuItem, FormControl, InputLabel
+  Typography,
+  Box,
+  CircularProgress,
+  Avatar,
+  Paper,
+  Divider,
+  Chip,
+  Stack,
+  TextField,
+  Button,
+  Snackbar,
+  Alert,
+  IconButton,
+  InputAdornment,
+  Grid,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getAuthConfig } from '../../Actions/config';
@@ -33,12 +51,18 @@ const Profil = () => {
 
   const fetchClientData = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_SERVER_URI}/client/get/id/${id}`, getAuthConfig());
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_URI}/client/get/id/${id}`,
+        getAuthConfig()
+      );
       if (response.ok) {
         const data = await response.json();
         setClient(data);
         if (data.id_agency) {
-          const agencyResponse = await fetch(`${process.env.REACT_APP_SERVER_URI}/agency/get/id/${data.id_agency}`, getAuthConfig());
+          const agencyResponse = await fetch(
+            `${process.env.REACT_APP_SERVER_URI}/agency/get/id/${data.id_agency}`,
+            getAuthConfig()
+          );
           if (agencyResponse.ok) {
             const agencyData = await agencyResponse.json();
             setAgency(agencyData);
@@ -48,7 +72,7 @@ const Profil = () => {
         navigate('/auth/login');
       }
     } catch (error) {
-      console.error("Erreur réseau", error);
+      console.error('Erreur réseau', error);
     } finally {
       setLoading(false);
     }
@@ -56,15 +80,18 @@ const Profil = () => {
 
   const fetchAgencies = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_SERVER_URI}/agency/get`, getAuthConfig());
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_URI}/agency/get`,
+        getAuthConfig()
+      );
       if (response.ok) {
         const agenciesData = await response.json();
         setAgencies(agenciesData);
       } else {
-        console.error("Erreur lors de la récupération des agences");
+        console.error('Erreur lors de la récupération des agences');
       }
     } catch (error) {
-      console.error("Erreur réseau lors de la récupération des agences", error);
+      console.error('Erreur réseau lors de la récupération des agences', error);
     }
   };
 
@@ -81,6 +108,7 @@ const Profil = () => {
     setEditing(!editing);
   };
 
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setClient((prevClient) => ({
@@ -89,6 +117,7 @@ const Profil = () => {
     }));
   };
 
+
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
@@ -96,6 +125,7 @@ const Profil = () => {
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
 
   const handleAgencyChange = (event) => {
     const agencyId = event.target.value;
@@ -142,7 +172,6 @@ const Profil = () => {
 
   if (loading) return <CircularProgress sx={{ mt: 5 }} />;
   if (!client) return <Typography variant="h6">Aucune information trouvée</Typography>;
-
   return (
     <Box
       sx={{
@@ -217,19 +246,36 @@ const Profil = () => {
         </Button>
 
         <Divider sx={{ mb: 4 }}>
-          <Chip label="Informations Personnelles" color="primary" variant="outlined" />
+          <Chip
+            label='Informations Personnelles'
+            color='primary'
+            variant='outlined'
+          />
         </Divider>
 
         <Box sx={{ textAlign: 'left', mb: 4, px: 4 }}>
-          <Grid container spacing={2} sx={{ mb: 2 }}>
-            <Grid item xs={12} md={6}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold', mb: 1 }}>Prénom :</Typography>
+          <Grid
+            container
+            spacing={2}
+            sx={{ mb: 2 }}
+          >
+            <Grid
+              item
+              xs={12}
+              md={6}
+            >
+              <Typography
+                variant='body1'
+                sx={{ fontWeight: 'bold', mb: 1 }}
+              >
+                Prénom :
+              </Typography>
               {editing ? (
                 <TextField
-                  label="Prénom"
-                  name="first_name"
-                  variant="outlined"
-                  size="small"
+                  label='Prénom'
+                  name='first_name'
+                  variant='outlined'
+                  size='small'
                   value={client.first_name || ''}
                   onChange={handleInputChange}
                   fullWidth
@@ -240,14 +286,23 @@ const Profil = () => {
                 </Typography>
               )}
             </Grid>
-            <Grid item xs={12} md={6}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold', mb: 1 }}>Nom :</Typography>
+            <Grid
+              item
+              xs={12}
+              md={6}
+            >
+              <Typography
+                variant='body1'
+                sx={{ fontWeight: 'bold', mb: 1 }}
+              >
+                Nom :
+              </Typography>
               {editing ? (
                 <TextField
-                  label="Nom"
-                  name="last_name"
-                  variant="outlined"
-                  size="small"
+                  label='Nom'
+                  name='last_name'
+                  variant='outlined'
+                  size='small'
                   value={client.last_name || ''}
                   onChange={handleInputChange}
                   fullWidth
@@ -261,13 +316,23 @@ const Profil = () => {
           </Grid>
 
           {editing && (
-            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>Mot de passe :</Typography>
+            <Stack
+              direction='row'
+              alignItems='center'
+              spacing={1}
+              sx={{ mb: 2 }}
+            >
+              <Typography
+                variant='body1'
+                sx={{ fontWeight: 'bold' }}
+              >
+                Mot de passe :
+              </Typography>
               <TextField
-                label="Mot de passe"
-                type={showPassword ? "text" : "password"}
-                variant="outlined"
-                size="small"
+                label='Mot de passe'
+                type={showPassword ? 'text' : 'password'}
+                variant='outlined'
+                size='small'
                 value={password}
                 onChange={handlePasswordChange}
                 fullWidth
@@ -283,31 +348,42 @@ const Profil = () => {
               />
             </Stack>
           )}
-
-          <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+          <Stack
+            direction='row'
+            alignItems='center'
+            spacing={1}
+            sx={{ mb: 2 }}
+          >
             <EmailIcon sx={{ color: indigo[400] }} />
             {editing ? (
               <TextField
-                label="Email"
-                name="email"
-                variant="outlined"
-                size="small"
+                label='Email'
+                name='email'
+                variant='outlined'
+                size='small'
                 value={client.email || ''}
                 onChange={handleInputChange}
                 fullWidth
               />
             ) : (
-              <Typography variant="body1"><strong>Email :</strong> {client.email}</Typography>
+              <Typography variant='body1'>
+                <strong>Email :</strong> {client.email}
+              </Typography>
             )}
           </Stack>
-          <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+          <Stack
+            direction='row'
+            alignItems='center'
+            spacing={1}
+            sx={{ mb: 2 }}
+          >
             <BusinessIcon sx={{ color: indigo[400] }} />
             {editing ? (
               <TextField
-                label="Entreprise"
-                name="company"
-                variant="outlined"
-                size="small"
+                label='Entreprise'
+                name='company'
+                variant='outlined'
+                size='small'
                 value={client.company || ''}
                 onChange={handleInputChange}
                 fullWidth
@@ -319,36 +395,61 @@ const Profil = () => {
         </Box>
 
         <Divider sx={{ mb: 4 }}>
-          <Chip label="Informations de l'Agence" color="primary" variant="outlined" />
+          <Chip
+            label="Informations de l'Agence"
+            color='primary'
+            variant='outlined'
+          />
         </Divider>
 
         <Box sx={{ textAlign: 'left', mb: 4, px: 4 }}>
-          <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+          <Stack
+            direction='row'
+            alignItems='center'
+            spacing={1}
+            sx={{ mb: 2 }}
+          >
             <LocationOnIcon sx={{ color: indigo[400] }} />
             {editing ? (
-              <FormControl fullWidth variant="outlined">
-                <InputLabel id="agency-select-label">Agence</InputLabel>
+              <FormControl
+                fullWidth
+                variant='outlined'
+              >
+                <InputLabel id='agency-select-label'>Agence</InputLabel>
                 <Select
-                  labelId="agency-select-label"
+                  labelId='agency-select-label'
                   value={agency?.id_agency || ''}
                   onChange={handleAgencyChange}
-                  label="Agence"
+                  label='Agence'
                 >
-                  {agencies.map((agency) => (
-                    <MenuItem key={agency.id_agency} value={agency.id_agency}>
+                  {agencies.map(agency => (
+                    <MenuItem
+                      key={agency.id_agency}
+                      value={agency.id_agency}
+                    >
                       {agency.city} - {agency.address}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
             ) : (
-              <Typography variant="body1"><strong>Agence :</strong> {agency ? `${agency.city} - ${agency.address}` : 'Non spécifiée'}</Typography>
+              <Typography variant='body1'>
+                <strong>Agence :</strong>{' '}
+                {agency ? `${agency.city} - ${agency.address}` : 'Non spécifiée'}
+              </Typography>
             )}
           </Stack>
         </Box>
-
-        <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-          <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+        >
+          <Alert
+            onClose={handleCloseSnackbar}
+            severity={snackbarSeverity}
+            sx={{ width: '100%' }}
+          >
             {snackbarMessage}
           </Alert>
         </Snackbar>
@@ -356,5 +457,6 @@ const Profil = () => {
     </Box>
   );
 };
+
 
 export default Profil;

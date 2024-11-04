@@ -2,6 +2,7 @@ package com.JEEproject.Backend.Models;
 
 import com.JEEproject.Backend.Enums.Cities;
 import com.JEEproject.Backend.Enums.Roles;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

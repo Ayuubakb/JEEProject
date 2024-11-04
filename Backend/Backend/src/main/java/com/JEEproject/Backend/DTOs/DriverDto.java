@@ -30,9 +30,10 @@ public class DriverDto extends UserDto {
             Cities city,
             MissionType driver_type,
             Boolean is_available,
-            int numMissions
+            int numMissions,
+            Boolean is_active
     ){
-        super(id_user,first_name,last_name,email,role,add_date,id_agency,city);
+        super(id_user,first_name,last_name,email,role,add_date,id_agency,city,is_active);
         this.driver_type=driver_type;
         this.is_available=is_available;
         this.numMissions=numMissions;

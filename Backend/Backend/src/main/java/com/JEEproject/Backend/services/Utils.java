@@ -37,7 +37,8 @@ public class Utils {
                     u.getRole(),
                     u.getAdd_date(),
                     u.getAgency().getId_agency(),
-                    u.getAgency().getCity()
+                    u.getAgency().getCity(),
+                    u.getIs_active()
             );
             userDto.add(up);
         });
@@ -59,7 +60,8 @@ public class Utils {
                     c.getCompany(),
                     c.getAddress(),
                     c.getBalance(),
-                    c.getOrders().size()
+                    c.getOrders().size(),
+                    c.getIs_active()
             );
             clientDtos.add(client);
         });
@@ -80,7 +82,8 @@ public class Utils {
                     d.getAgency().getCity(),
                     d.getDriver_type(),
                     d.getIs_available(),
-                    d.getMissions().size()
+                    d.getMissions().size(),
+                    d.getIs_active()
             );
             driverDtos.add(driver);
         });
@@ -126,7 +129,7 @@ public class Utils {
         });
         return agencyDtos;
     }
-    
+
     public List<OrderDto> generateOrderProjection(List<Order> orders) {
         List<OrderDto> orderDtos = new ArrayList<>();
         orders.forEach(order -> {
@@ -152,4 +155,24 @@ public class Utils {
         });
         return orderDtos;
     }
+
+    public List<BankDto> generateBankProjection(List<Bank> banks) {
+        List<BankDto> bankDtos = new ArrayList<>();
+        banks.forEach(bank -> {
+            BankDto tmp = new BankDto(
+                    bank.getId_bank(),
+                    bank.getUser().getId_user(), // Assuming getUser() returns the user entity
+                    bank.getName(),
+                    bank.getAddress(),
+                    bank.getCardnum(),
+                    bank.getCvv(),
+                    bank.getExpiry_y(),
+                    bank.getExpiry_m(),
+                    bank.getBalance()
+            );
+            bankDtos.add(tmp);
+        });
+        return bankDtos;
+    }
+
 }

@@ -10,6 +10,7 @@
     "@mui/icons-material": "^6.1.6",
     "@mui/material": "^6.1.6",
     "@mui/system": "^6.1.6",
+    "@mui/x-charts": "^7.22.1",
     "@popperjs/core": "^2.11.8",
     "@redux-devtools/extension": "^3.3.0",
     "@shadcn/ui": "^0.0.4",
