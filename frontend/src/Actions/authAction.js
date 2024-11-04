@@ -34,3 +34,13 @@ export const login = (email, password) => async dispatch => {
     return { err: 'Something went wrong', role: null };
   }
 };
+
+export const logout = () => dispatch => {
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('userId');
+  localStorage.removeItem('role');
+
+  dispatch({
+    type: LOGOUT_SUCCESS,
+  });
+};

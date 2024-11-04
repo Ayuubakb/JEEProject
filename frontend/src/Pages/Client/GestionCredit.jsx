@@ -71,7 +71,7 @@ const GestionCredits = () => {
   };
 
   const handleAddBank = async () => {
-    const { cardnum, cvv, expiry_y, expiry_m } = newBank;
+    const { cardnum, cvv, expiry_y, expiry_m, name, address } = newBank;
 
     // Card number validation (exactly 16 digits)
     if (!/^\d{16}$/.test(cardnum) || parseInt(cardnum) < 0) {
@@ -98,14 +98,27 @@ const GestionCredits = () => {
     }
 
     try {
-      await axios.post(
-        `${process.env.REACT_APP_SERVER_URI}/bank/save`,
-        { ...newBank, userId },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const payload = {
+        user: {
+          id_user: userId,
+        },
+        name, // Add the bank name from newBank
+        address, // Add the address from newBank
+        cardnum: parseInt(cardnum), // Ensure cardnum is an integer
+        cvv: parseInt(cvv), // Ensure cvv is an integer
+        expiry_y: parseInt(expiry_y), // Ensure expiry year is an integer
+        expiry_m: parseInt(expiry_m), // Ensure expiry month is an integer
+        balance: 5000.0, // Set the initial balance as specified
+      };
+
+      await axios.post(`${process.env.REACT_APP_SERVER_URI}/bank/save`, payload, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
       alert('Card added successfully');
       window.location.reload();
     } catch (error) {
+      console.log({ ...newBank, id_user: userId });
       alert('Error adding card');
     }
   };
@@ -167,120 +180,49 @@ const GestionCredits = () => {
       <TextField
         label='Name'
         fullWidth
+        required
         onChange={e => setNewBank({ ...newBank, name: e.target.value })}
         sx={{ mb: 2 }}
       />
       <TextField
         label='Address'
         fullWidth
+        required
         onChange={e => setNewBank({ ...newBank, address: e.target.value })}
         sx={{ mb: 2 }}
       />
-      <div style={{ marginBottom: '16px' }}>
-        <label
-          htmlFor='card-number'
-          style={{ display: 'block', marginBottom: '8px' }}
-        >
-          Card Number
-        </label>
-        <input
-          id='card-number'
-          onChange={e => setNewBank({ ...newBank, cardnum: e.target.value })}
-          type='text'
-          maxLength={16}
-          minLength={16}
-          pattern='\\d{16}' // Ensures only digits
-          required
-          autoComplete='cc-number'
-          style={{
-            width: '100%',
-            padding: '8px',
-            borderRadius: '4px',
-            border: '1px solid #ccc',
-            boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
-          }}
-        />
-      </div>
-
-      <div style={{ marginBottom: '16px' }}>
-        <label
-          htmlFor='cvv'
-          style={{ display: 'block', marginBottom: '8px' }}
-        >
-          CVV
-        </label>
-        <input
-          id='cvv'
-          onChange={e => setNewBank({ ...newBank, cvv: e.target.value })}
-          type='text'
-          maxLength={3}
-          minLength={3}
-          pattern='\\d{3}' // Ensures only digits
-          required
-          autoComplete='cc-cvv'
-          style={{
-            width: '100%',
-            padding: '8px',
-            borderRadius: '4px',
-            border: '1px solid #ccc',
-            boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
-          }}
-        />
-      </div>
-
-      <div style={{ marginBottom: '16px' }}>
-        <label
-          htmlFor='expiry-year'
-          style={{ display: 'block', marginBottom: '8px' }}
-        >
-          Expiry Year
-        </label>
-        <input
-          id='expiry-year'
-          onChange={e => setNewBank({ ...newBank, expiry_y: e.target.value })}
-          type='number'
-          max={9999}
-          min={1000}
-          maxLength={4}
-          minLength={4}
-          pattern='\\d{4}' // Ensures only digits
-          required
-          style={{
-            width: '100%',
-            padding: '8px',
-            borderRadius: '4px',
-            border: '1px solid #ccc',
-            boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
-          }}
-        />
-      </div>
-
-      <div style={{ marginBottom: '16px' }}>
-        <label
-          htmlFor='expiry-month'
-          style={{ display: 'block', marginBottom: '8px' }}
-        >
-          Expiry Month
-        </label>
-        <input
-          id='expiry-month'
-          onChange={e => setNewBank({ ...newBank, expiry_m: e.target.value })}
-          type='number'
-          max={12}
-          min={1}
-          maxLength={2}
-          minLength={1}
-          pattern='^(0[1-9]|1[0-2])$' // Ensures valid month format
-          required
-          style={{
-            width: '100%',
-            padding: '8px',
-            borderRadius: '4px',
-            border: '1px solid #ccc',
-            boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
-          }}
-        />
-      </div>
+      <TextField
+        label='Card Number'
+        fullWidth
+        onChange={e => setNewBank({ ...newBank, cardnum: e.target.value })}
+        required
+        autoComplete='cc-number'
+        sx={{ mb: 2 }}
+      />
+      <TextField
+        label='CVV'
+        fullWidth
+        onChange={e => setNewBank({ ...newBank, cvv: e.target.value })}
+        required
+        autoComplete='cc-cvv'
+        sx={{ mb: 2 }}
+      />
+      <TextField
+        label='Expiry Year'
+        fullWidth
+        onChange={e => setNewBank({ ...newBank, expiry_y: e.target.value })}
+        type='number'
+        required
+        sx={{ mb: 2 }}
+      />
+      <TextField
+        label='Expiry Month'
+        fullWidth
+        onChange={e => setNewBank({ ...newBank, expiry_m: e.target.value })}
+        type='number'
+        required
+        sx={{ mb: 2 }}
+      />
 
       <Button
         variant='contained'

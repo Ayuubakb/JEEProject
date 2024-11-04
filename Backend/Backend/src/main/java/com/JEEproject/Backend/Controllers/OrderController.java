@@ -1,5 +1,6 @@
 package com.JEEproject.Backend.Controllers;
 
+import com.JEEproject.Backend.Converters.OrderConverter;
 import com.JEEproject.Backend.DTOs.OrderDto;
 import com.JEEproject.Backend.DTOs.OrderFilters;
 import com.JEEproject.Backend.Enums.Cities;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/order")
@@ -140,4 +142,54 @@ public class OrderController {
         return new ResponseEntity<>(utils.generateOrderProjection(orders), HttpStatus.OK);
     }
 
+    @GetMapping("/client/{clientId}")
+    public ResponseEntity<List<OrderDto>> getOrdersByClientId(@PathVariable int clientId) {
+        List<OrderDto> orders;
+        try {
+            // Récupérer les commandes pour le client avec l'ID spécifié
+            orders = orderRepo.findByClientId(clientId)
+                    .stream()
+                    .map(order -> {
+                        OrderDto dto = OrderConverter.toProjection(order);
+                        // Vérifier si le destinataire est null avant d'accéder aux champs
+                        if (order.getReceiver() != null) {
+                            dto.setId_receiver(order.getReceiver().getId_receiver());
+                            dto.setReceiver(order.getReceiver().getFullname());
+                            dto.setReceiverAddress(order.getReceiver().getAddress());
+                            dto.setTo(order.getReceiver().getCity());
+                        } else {
+                            dto.setId_receiver(0); // ou une valeur par défaut appropriée
+                            dto.setReceiver("Aucun destinataire assigné");
+                            dto.setReceiverAddress("N/A");
+                            dto.setTo(null); // ou gérer selon vos besoins
+                        }
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            System.out.println("Erreur lors de la récupération des commandes pour l'ID client " + clientId + ": " + e.getMessage());
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{orderId}")
+    public ResponseEntity<String> deleteOrder(@PathVariable int orderId) {
+        try {
+            Order order = orderRepo.findById(orderId)
+                    .orElseThrow(() -> new RuntimeException("Order not found"));
+
+            // Vérifie si le statut de la commande est ProcessingOrder
+            if (order.getTracking_status() == TrackingStatus.ProcessingOrder) {
+                orderRepo.delete(order);
+                return new ResponseEntity<>("Order deleted successfully.", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Only orders with status 'ProcessingOrder' can be deleted.", HttpStatus.FORBIDDEN);
+            }
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

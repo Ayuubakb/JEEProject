@@ -1,10 +1,10 @@
 package com.JEEproject.Backend.Repositories;
 
 import com.JEEproject.Backend.Converters.OrderConverter;
+import com.JEEproject.Backend.DTOs.OrderDto;
 import com.JEEproject.Backend.Enums.Cities;
 import com.JEEproject.Backend.Enums.TrackingStatus;
 import com.JEEproject.Backend.Models.Order;
-import com.JEEproject.Backend.DTOs.OrderDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -43,4 +43,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
                 .map(OrderConverter::toProjection)
                 .collect(Collectors.toList());
     }
+
+    @Query("SELECT o FROM Order o WHERE o.client.id_user = :clientId")
+    List<Order> findByClientId(@Param("clientId") int clientId);
 }

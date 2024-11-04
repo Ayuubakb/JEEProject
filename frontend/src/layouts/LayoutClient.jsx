@@ -12,7 +12,7 @@ const LayoutClient = () => {
       <div style={styles.main}>
         <Sidebar /> {/* Sidebar affichée ici pour toutes les pages */}
         <div style={styles.content}>
-          <Outlet />  {/* Charge la page courante */}
+          <Outlet /> {/* Charge la page courante */}
         </div>
       </div>
       <Footer />

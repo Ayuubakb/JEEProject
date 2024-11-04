@@ -23,8 +23,9 @@ import GestionColliersMissions from './Pages/Manager/GestionColliersMissions';
 import SupportManager from './Pages/Manager/Support';
 import SuiviLivraisons from './Pages/Manager/SuiviLivraisons';
 
+import LayoutDriver from './layouts/LayoutDriver';
 import MissionsAVenir from './Pages/Driver/MissionsAVenir';
-import ConfirmationMission from './Pages/Driver/ConfirmationMission';
+import ProfilDriver from './Pages/Driver/ProfilDriver';
 import HistoriqueMissions from './Pages/Driver/HistoriqueMissions';
 
 function App() {
@@ -117,14 +118,17 @@ function App() {
 
             {/* Routes Chauffeur Sécurisées */}
             <Route element={<PrivateRoute />}>
-              <Route path='/driver/:id'>
+              <Route
+                path='/driver/:id'
+                element={<LayoutDriver />}
+              >
                 <Route
                   index
                   element={<MissionsAVenir />}
                 />
                 <Route
-                  path='confirmation-mission'
-                  element={<ConfirmationMission />}
+                  path='profildriver'
+                  element={<ProfilDriver />}
                 />
                 <Route
                   path='historique-missions'

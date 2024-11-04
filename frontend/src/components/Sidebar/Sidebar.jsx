@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
 import {
   Box,
   List,
@@ -20,8 +19,13 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import MenuIcon from '@mui/icons-material/Menu';
 import logo from '../../assets/img/brand/COLLIFAST.png';
+import { useDispatch } from 'react-redux';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { logout } from '../../Actions/authAction';
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const location = useLocation();
   const sidebarRef = useRef(null);
 
@@ -29,7 +33,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     localStorage.getItem('sidebar-expanded') === 'true'
   );
   const userId = localStorage.getItem('userId'); // Récupération de l'ID utilisateur
-
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/auth/login');
+  };
   // Mise à jour des chemins avec l'ID utilisateur
   const menuItems = [
     { text: 'Gestion des Commandes', path: `/client/${userId}`, icon: <HomeIcon /> },
@@ -117,9 +124,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       <Box sx={styles.logoutContainer}>
         <Divider sx={styles.divider} />
         <ListItemButton
-          component={Link}
-          to='/auth/logout'
-          sx={styles.logoutButton}
+          onClick={handleLogout}
+          sx={{ color: '#EF4444', '&:hover': { backgroundColor: '#FEF2F2' } }}
         >
           <ListItemIcon>
             <LogoutIcon sx={{ color: '#EF4444' }} />

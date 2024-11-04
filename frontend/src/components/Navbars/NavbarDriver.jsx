@@ -1,59 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import {
-  Box,
-  IconButton,
-  InputBase,
-  Menu,
-  MenuItem,
-  Tooltip,
-  Fade,
-  Typography,
-} from '@mui/material';
+import { Box, IconButton, InputBase, Menu, MenuItem, Tooltip, Fade } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
 import logo from '../../assets/img/brand/COLLIFAST.png';
 import { logout } from '../../Actions/authAction';
-import axios from 'axios';
 
 const Navbar = ({ sidebarExpanded }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
+  const userId = localStorage.getItem('userId');
   const handleMenuOpen = event => {
     setAnchorEl(event.currentTarget);
   };
-  const [balance, setBalance] = useState(null);
-  const userId = localStorage.getItem('userId');
-  const token = localStorage.getItem('accessToken');
-
-  useEffect(() => {
-    const fetchBalance = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_SERVER_URI}/client/get/id/${userId}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        setBalance(response.data.balance);
-      } catch (error) {
-        console.error('Error fetching balance:', error);
-      }
-    };
-
-    fetchBalance();
-  }, [userId, token]);
 
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-  const handleProfile = () => {
+  const handleProfiledriver = () => {
     handleMenuClose();
-    navigate(`/client/${userId}/profil`);
+    navigate(`/driver/${userId}/profildriver`);
   };
   const handleLogout = () => {
     dispatch(logout());
@@ -92,16 +62,6 @@ const Navbar = ({ sidebarExpanded }) => {
       </Box>
 
       <Box sx={styles.userSection}>
-        {/* Display the user balance */}
-        {balance !== null && (
-          <Typography
-            variant='subtitle1'
-            sx={{ marginRight: '20px', fontWeight: 'bold', color: 'gold' }}
-          >
-            Balance: {balance} MAD
-          </Typography>
-        )}
-
         <Tooltip
           title='Notifications'
           arrow
@@ -143,7 +103,7 @@ const Navbar = ({ sidebarExpanded }) => {
           onClose={handleMenuClose}
           PaperProps={{ sx: styles.menu }}
         >
-          <MenuItem onClick={handleProfile}>Profil</MenuItem>
+          <MenuItem onClick={handleProfiledriver}>Profil</MenuItem>
           <MenuItem onClick={handleLogout}>Déconnexion</MenuItem>
         </Menu>
       </Box>
