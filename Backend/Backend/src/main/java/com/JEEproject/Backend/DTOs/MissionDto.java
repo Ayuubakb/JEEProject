@@ -23,4 +23,16 @@ public class MissionDto {
     private Cities from_city;
     private Cities to_city;
     private List<OrderDto> orders; // Liste de OrderDto pour inclure les informations des ordres
+
+    public MissionDto(int idMission, Boolean isDone, MissionType missionType, Date startDate, Date endDate, Cities fromCity, Cities toCity) {
+        this.id_mission = idMission;
+        this.is_done = isDone;
+        this.mission_type = missionType;
+        this.start_date = startDate;
+        this.end_date = endDate;
+        this.from_city = fromCity;
+        this.to_city = toCity;
+    }
+
+
 }
