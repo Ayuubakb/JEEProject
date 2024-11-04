@@ -4,6 +4,7 @@ import com.JEEproject.Backend.Enums.OrderType;
 import com.JEEproject.Backend.Enums.TrackingStatus;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @Table(name = "orders")
 @Getter
 @Setter
+@AllArgsConstructor
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,12 +38,7 @@ public class Order {
     @JoinColumn(name = "id_client")  // Ensure this column refers to Client's ID
     private Client client;  // Changed to Client instead of User
 
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = "mission_details",
-            joinColumns = {@JoinColumn(name = "id_order")},
-            inverseJoinColumns = {@JoinColumn(name = "id_mission")}
-    )
+    @ManyToMany(mappedBy = "orders")
     public List<Mission> missions = new ArrayList<>();
 
     @ManyToOne
@@ -56,6 +53,18 @@ public class Order {
     }
 
     public Order(OrderType orderType, float price, int priority, Client client, int weight, Receiver receiver) {
+        this.date = new Date();
+        this.tracking_status = TrackingStatus.ProcessingOrder;
+        this.orderType = orderType;
+        this.price = price;
+        this.priority = priority;
+        this.client = client;  // Changed to client
+        this.weight = weight;
+        this.is_aborted = false;  // Default to false for new orders
+        this.receiver = receiver;
+    }
+    public Order(int idOrder,OrderType orderType, float price, int priority, Client client, int weight, Receiver receiver) {
+        this.idOrder = idOrder;
         this.date = new Date();
         this.tracking_status = TrackingStatus.ProcessingOrder;
         this.orderType = orderType;

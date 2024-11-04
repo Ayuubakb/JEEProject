@@ -100,7 +100,7 @@ const GestionColliersMissions = () => {
                     id_user:selectedDriver
                 },
                 orders:[
-                    {id_order:selectedOrder.idOrder}
+                    {idOrder:selectedOrder.idOrder}
                 ]
             }
             if(nextStep==="Shipping")
@@ -109,6 +109,8 @@ const GestionColliersMissions = () => {
                 mission={...mission,from_city:selectedOrder.to,to_city:selectedOrder.to}
             else if(nextStep==="CollectingFromSender")
                 mission={...mission,from_city:selectedOrder.from,to_city:selectedOrder.from}
+            console.log(mission);
+            
             try{
                 const response=await fetch(`${process.env.REACT_APP_SERVER_URI}/missions/add`,{
                     method:"POST",

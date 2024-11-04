@@ -40,7 +40,7 @@ public class Mission {
     @JoinColumn(name = "id_driver")
     private Driver driver;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @ManyToMany
     @JoinTable(
             name = "mission_details",
             joinColumns = {@JoinColumn(name = "id_mission")},

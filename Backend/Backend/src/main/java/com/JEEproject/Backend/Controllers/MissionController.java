@@ -248,12 +248,18 @@ public class MissionController {
 
     @PostMapping(value = "/add")
     public ResponseEntity<String> addMission(@RequestBody Mission newMission) {
+        List<Order> existingOrders = new ArrayList<>();
+        for (Order order : newMission.getOrders()) {
+            Order existingOrder = orderRepo.findById(order.getIdOrder())
+                    .orElseThrow(() -> new RuntimeException("Order not found with ID: " + order.getIdOrder()));
+            existingOrders.add(existingOrder);
+        }
         Mission mission=new Mission(
                 newMission.getMission_type(),
                 newMission.getFrom_city(),
                 newMission.getTo_city(),
                 newMission.getDriver(),
-                newMission.getOrders()
+                existingOrders
         );
         try {
             missionRepo.save(mission);
