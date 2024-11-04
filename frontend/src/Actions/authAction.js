@@ -1,4 +1,5 @@
 // src/Actions/authActions.js
+
 import { getAuthConfig } from './config';
 import { GET_CLIENTS_FAIL, GET_CONECTED_USER_FAIL, GET_CONECTED_USER_SUCCESS, LOGIN_FAIL, LOGIN_SUCCESS, LOGOUT_SUCCESS } from './types';
 

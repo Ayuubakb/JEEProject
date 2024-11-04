@@ -3,42 +3,52 @@ package com.JEEproject.Backend.Models;
 import com.JEEproject.Backend.Converters.CitiesConverter;
 import com.JEEproject.Backend.Enums.Cities;
 import com.JEEproject.Backend.Enums.MissionType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Getter
+@Setter
 @AllArgsConstructor
 @Entity
 @Table(name = "missions")
 public class Mission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int id_mission;
-    public Boolean is_done;
+    private int id_mission;
+    private Boolean is_done;
+
     @Enumerated(value = EnumType.STRING)
-    public MissionType mission_type;
-    public Date start_date;
-    public Date end_date;
+    private MissionType mission_type;
+    private Date start_date;
+    private Date end_date;
 
     @Convert(converter = CitiesConverter.class)
-    public Cities from_city;
+    private Cities from_city;
 
     @Convert(converter = CitiesConverter.class)
-    public Cities to_city;
+    private Cities to_city;
 
     @ManyToOne
     @JoinColumn(name = "id_driver")
-    public Driver driver;
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @JsonBackReference // Évite la boucle en ne sérialisant pas cette référence
+    private Driver driver;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @JoinTable(
             name = "mission_details",
             joinColumns = {@JoinColumn(name = "id_mission")},
             inverseJoinColumns = {@JoinColumn(name = "id_order")}
     )
-    public List<Order> Orders = new ArrayList<>();
+    @JsonManagedReference
+    private List<Order> orders = new ArrayList<>();
 
     public Mission() {
     }

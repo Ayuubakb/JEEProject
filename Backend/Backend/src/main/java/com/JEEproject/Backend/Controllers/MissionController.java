@@ -1,5 +1,7 @@
 package com.JEEproject.Backend.Controllers;
 
+import com.JEEproject.Backend.DTOs.MissionDto;
+import com.JEEproject.Backend.DTOs.OrderDto;
 import com.JEEproject.Backend.Enums.Cities;
 import com.JEEproject.Backend.Enums.MissionType;
 import com.JEEproject.Backend.Enums.OrderType;
@@ -8,12 +10,12 @@ import com.JEEproject.Backend.Models.Driver;
 import com.JEEproject.Backend.Models.Mission;
 import com.JEEproject.Backend.Models.Order;
 import com.JEEproject.Backend.Repositories.DriverRepository;
-import com.JEEproject.Backend.Repositories.OrderRepository;
 import com.JEEproject.Backend.Repositories.MissionRepository;
-
+import com.JEEproject.Backend.Repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/missions")
@@ -186,6 +189,62 @@ public class MissionController {
             return new ResponseEntity<>("Foreign mission created successfully with " + selectedOrders.size() + " orders.", HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>("Failed to create foreign mission: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional
+    @GetMapping("/driver/{driverId}")
+    public ResponseEntity<List<MissionDto>> getMissionsByDriverId(@PathVariable int driverId) {
+        try {
+            Driver driver = driverRepo.findById(driverId)
+                    .orElseThrow(() -> new RuntimeException("Driver not found"));
+
+            List<Mission> missions = missionRepo.findByDriver(driver);
+
+            if (missions.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            List<MissionDto> missionDtos = missions.stream().map(mission -> {
+                MissionDto missionDto = new MissionDto(
+                        mission.getId_mission(),
+                        mission.getIs_done(),
+                        mission.getMission_type(),
+                        mission.getStart_date(),
+                        mission.getEnd_date(),
+                        mission.getFrom_city(),
+                        mission.getTo_city()
+                );
+
+                // Convertir les commandes associées à chaque mission en objets OrderDto
+                List<OrderDto> orderDtos = mission.getOrders().stream().map(order -> new OrderDto(
+                        order.getIdOrder(),
+                        order.getDate(),
+                        order.getTracking_status(),
+                        order.getOrderType(),
+                        order.getPrice(),
+                        order.getPriority(),
+                        order.getWeight(),
+                        order.getClient().getId_user(),
+                        order.getReceiver().getId_receiver(),
+                        order.getIs_aborted(),
+                        order.getClient().getCompany(),
+                        order.getReceiver().getFullname(),
+                        order.getClient().getAgency().getCity(),
+                        order.getReceiver().getCity(),
+                        order.getClient().getAddress(),
+                        order.getReceiver().getAddress()
+                )).collect(Collectors.toList());
+
+                // Ajouter les OrderDto au MissionDto
+                missionDto.setOrders(orderDtos);
+
+                return missionDto;
+            }).collect(Collectors.toList());
+
+            return new ResponseEntity<>(missionDtos, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

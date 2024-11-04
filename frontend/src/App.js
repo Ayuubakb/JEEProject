@@ -22,6 +22,8 @@ import GestionUtilisateurs from './Pages/Manager/GestionUtilisateurs';
 import GestionColliersMissions from './Pages/Manager/GestionColliersMissions';
 import SupportManager from './Pages/Manager/Support';
 import SuiviLivraisons from './Pages/Manager/SuiviLivraisons';
+
+import LayoutDriver from './layouts/LayoutDriver';
 import LayoutManager from './layouts/LayoutManager'
 import MissionsAVenir from './Pages/Driver/MissionsAVenir';
 import ConfirmationMission from './Pages/Driver/ConfirmationMission';
@@ -89,6 +91,7 @@ function App() {
             {/* Routes Manager Sécurisées */}
             <Route element={<PrivateRoute />}>
               <Route path='/manager/:id' element={<LayoutManager/>}>
+
                 <Route
                   index
                   element={<TableauDeBord />}
@@ -122,21 +125,12 @@ function App() {
 
             {/* Routes Chauffeur Sécurisées */}
             <Route element={<PrivateRoute />}>
-              <Route path='/driver/:id'>
-                <Route
-                  index
-                  element={<MissionsAVenir />}
-                />
-                <Route
-                  path='confirmation-mission'
-                  element={<ConfirmationMission />}
-                />
-                <Route
-                  path='historique-missions'
-                  element={<HistoriqueMissions />}
-                />
-              </Route>
-            </Route>
+  <Route path='/driver/:id' element={<LayoutDriver />}>
+    <Route index element={<MissionsAVenir />} />
+    <Route path='profildriver' element={<ProfilDriver />} />
+    <Route path='historique-missions' element={<HistoriqueMissions />} />
+  </Route>
+</Route>
           </Routes>
         </Provider>
       </BrowserRouter>

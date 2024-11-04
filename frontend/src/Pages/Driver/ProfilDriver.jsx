@@ -1,24 +1,7 @@
+// src/Pages/Driver/ProfilDriver.jsx
 import React, { useEffect, useState } from 'react';
 import {
-  Typography,
-  Box,
-  CircularProgress,
-  Avatar,
-  Paper,
-  Divider,
-  Chip,
-  Stack,
-  TextField,
-  Button,
-  Snackbar,
-  Alert,
-  IconButton,
-  InputAdornment,
-  Grid,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
+  Typography, Box, CircularProgress, Avatar, Paper, Divider, Chip, Stack, TextField, Button, Snackbar, Alert, IconButton, InputAdornment, Grid, Select, MenuItem, FormControl, InputLabel
 } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getAuthConfig } from '../../Actions/config';
@@ -27,16 +10,17 @@ import BusinessIcon from '@mui/icons-material/Business';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
+import PhoneIcon from '@mui/icons-material/Phone';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { indigo, grey } from '@mui/material/colors';
 import { useTheme } from '@mui/material/styles';
 
-const Profil = () => {
+const ProfilDriver = () => {
   const theme = useTheme();
   const { id } = useParams();
   const navigate = useNavigate();
-  const [client, setClient] = useState(null);
+  const [driver, setDriver] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [agency, setAgency] = useState(null);
@@ -49,20 +33,14 @@ const Profil = () => {
 
   const userId = localStorage.getItem('userId');
 
-  const fetchClientData = async () => {
+  const fetchDriverData = async () => {
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_SERVER_URI}/client/get/id/${id}`,
-        getAuthConfig()
-      );
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URI}/driver/get/id/${id}`, getAuthConfig());
       if (response.ok) {
         const data = await response.json();
-        setClient(data);
+        setDriver(data);
         if (data.id_agency) {
-          const agencyResponse = await fetch(
-            `${process.env.REACT_APP_SERVER_URI}/agency/get/id/${data.id_agency}`,
-            getAuthConfig()
-          );
+          const agencyResponse = await fetch(`${process.env.REACT_APP_SERVER_URI}/agency/get/id/${data.id_agency}`, getAuthConfig());
           if (agencyResponse.ok) {
             const agencyData = await agencyResponse.json();
             setAgency(agencyData);
@@ -72,7 +50,7 @@ const Profil = () => {
         navigate('/auth/login');
       }
     } catch (error) {
-      console.error('Erreur réseau', error);
+      console.error("Erreur réseau", error);
     } finally {
       setLoading(false);
     }
@@ -80,18 +58,15 @@ const Profil = () => {
 
   const fetchAgencies = async () => {
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_SERVER_URI}/agency/get`,
-        getAuthConfig()
-      );
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URI}/agency/get`, getAuthConfig());
       if (response.ok) {
         const agenciesData = await response.json();
         setAgencies(agenciesData);
       } else {
-        console.error('Erreur lors de la récupération des agences');
+        console.error("Erreur lors de la récupération des agences");
       }
     } catch (error) {
-      console.error('Erreur réseau lors de la récupération des agences', error);
+      console.error("Erreur réseau lors de la récupération des agences", error);
     }
   };
 
@@ -100,7 +75,7 @@ const Profil = () => {
       navigate('/auth/login');
       return;
     }
-    fetchClientData();
+    fetchDriverData();
     fetchAgencies();
   }, [id, navigate, userId]);
 
@@ -108,15 +83,13 @@ const Profil = () => {
     setEditing(!editing);
   };
 
-
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setClient((prevClient) => ({
-      ...prevClient,
+    setDriver((prevDriver) => ({
+      ...prevDriver,
       [name]: value,
     }));
   };
-
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
@@ -126,7 +99,6 @@ const Profil = () => {
     setShowPassword(!showPassword);
   };
 
-
   const handleAgencyChange = (event) => {
     const agencyId = event.target.value;
     const selectedAgency = agencies.find((agency) => agency.id_agency === agencyId);
@@ -135,16 +107,15 @@ const Profil = () => {
 
   const handleSave = async () => {
     try {
-      const updatedClient = {
-        ...client,
+      const updatedDriver = {
+        ...driver,
         agency,
         ...(password && { password }),
       };
 
-      const response = await fetch(`${process.env.REACT_APP_SERVER_URI}/client/update`, {
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URI}/driver/update`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updatedClient),
+        body: JSON.stringify(updatedDriver),
         ...getAuthConfig(),
       });
       if (response.ok) {
@@ -152,7 +123,7 @@ const Profil = () => {
         setSnackbarSeverity('success');
         setEditing(false);
         setPassword('');
-        await fetchClientData();
+        await fetchDriverData();
       } else {
         setSnackbarMessage('Erreur lors de la mise à jour du profil.');
         setSnackbarSeverity('error');
@@ -171,7 +142,8 @@ const Profil = () => {
   };
 
   if (loading) return <CircularProgress sx={{ mt: 5 }} />;
-  if (!client) return <Typography variant="h6">Aucune information trouvée</Typography>;
+  if (!driver) return <Typography variant="h6">Aucune information trouvée</Typography>;
+
   return (
     <Box
       sx={{
@@ -201,38 +173,28 @@ const Profil = () => {
           },
         }}
       >
-        <Box sx={{ position: 'relative', mb: 3 }}>
-          <Box
-            sx={{
-              height: 180,
-              width: '100%',
-              backgroundImage: 'url("https://source.unsplash.com/1600x900/?workspace,abstract")',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              borderRadius: '12px',
-              mb: -10,
-              filter: 'brightness(0.75)',
-            }}
-          />
+        <Box sx={{ position: 'relative', mb: 3, mt: -4 }}>
           <Avatar
             sx={{
               width: 130,
               height: 130,
               mx: 'auto',
-              mt: -8,
               bgcolor: indigo[700],
-              fontSize: 36,
+              fontSize: 42,
               fontWeight: 'bold',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
               border: '4px solid white',
               boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
             }}
           >
-            {client.first_name[0]}{client.last_name[0]}
+            {driver.first_name[0]}{driver.last_name[0]}
           </Avatar>
         </Box>
 
         <Typography variant="h4" sx={{ fontWeight: 'bold', color: indigo[800], mb: 3 }}>
-          Bienvenue, {client.first_name} {client.last_name} !
+          Bienvenue, {driver.first_name} {driver.last_name} !
         </Typography>
 
         <Button
@@ -246,210 +208,123 @@ const Profil = () => {
         </Button>
 
         <Divider sx={{ mb: 4 }}>
-          <Chip
-            label='Informations Personnelles'
-            color='primary'
-            variant='outlined'
-          />
+          <Chip label="Informations Personnelles" color="primary" variant="outlined" />
         </Divider>
 
         <Box sx={{ textAlign: 'left', mb: 4, px: 4 }}>
-          <Grid
-            container
-            spacing={2}
-            sx={{ mb: 2 }}
-          >
-            <Grid
-              item
-              xs={12}
-              md={6}
-            >
-              <Typography
-                variant='body1'
-                sx={{ fontWeight: 'bold', mb: 1 }}
-              >
-                Prénom :
-              </Typography>
+          <Grid container spacing={2} sx={{ mb: 2 }}>
+            <Grid item xs={12} md={6}>
+              <Typography variant="body1" sx={{ fontWeight: 'bold', mb: 1 }}>Prénom :</Typography>
               {editing ? (
                 <TextField
-                  label='Prénom'
-                  name='first_name'
-                  variant='outlined'
-                  size='small'
-                  value={client.first_name || ''}
+                  label="Prénom"
+                  name="first_name"
+                  variant="outlined"
+                  size="small"
+                  value={driver.first_name || ''}
                   onChange={handleInputChange}
                   fullWidth
                 />
               ) : (
                 <Typography variant="h6" sx={{ backgroundColor: grey[200], padding: '8px', borderRadius: 1 }}>
-                  {client.first_name}
+                  {driver.first_name}
                 </Typography>
               )}
             </Grid>
-            <Grid
-              item
-              xs={12}
-              md={6}
-            >
-              <Typography
-                variant='body1'
-                sx={{ fontWeight: 'bold', mb: 1 }}
-              >
-                Nom :
-              </Typography>
+            <Grid item xs={12} md={6}>
+              <Typography variant="body1" sx={{ fontWeight: 'bold', mb: 1 }}>Nom :</Typography>
               {editing ? (
                 <TextField
-                  label='Nom'
-                  name='last_name'
-                  variant='outlined'
-                  size='small'
-                  value={client.last_name || ''}
+                  label="Nom"
+                  name="last_name"
+                  variant="outlined"
+                  size="small"
+                  value={driver.last_name || ''}
                   onChange={handleInputChange}
                   fullWidth
                 />
               ) : (
                 <Typography variant="h6" sx={{ backgroundColor: grey[200], padding: '8px', borderRadius: 1 }}>
-                  {client.last_name}
+                  {driver.last_name}
                 </Typography>
               )}
             </Grid>
           </Grid>
 
-          {editing && (
-            <Stack
-              direction='row'
-              alignItems='center'
-              spacing={1}
-              sx={{ mb: 2 }}
-            >
-              <Typography
-                variant='body1'
-                sx={{ fontWeight: 'bold' }}
-              >
-                Mot de passe :
-              </Typography>
-              <TextField
-                label='Mot de passe'
-                type={showPassword ? 'text' : 'password'}
-                variant='outlined'
-                size='small'
-                value={password}
-                onChange={handlePasswordChange}
-                fullWidth
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={toggleShowPassword} edge="end">
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Stack>
-          )}
-          <Stack
-            direction='row'
-            alignItems='center'
-            spacing={1}
-            sx={{ mb: 2 }}
-          >
+          <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
             <EmailIcon sx={{ color: indigo[400] }} />
             {editing ? (
               <TextField
-                label='Email'
-                name='email'
-                variant='outlined'
-                size='small'
-                value={client.email || ''}
+                label="Email"
+                name="email"
+                variant="outlined"
+                size="small"
+                value={driver.email || ''}
                 onChange={handleInputChange}
                 fullWidth
               />
             ) : (
-              <Typography variant='body1'>
-                <strong>Email :</strong> {client.email}
-              </Typography>
+              <Typography variant="body1"><strong>Email :</strong> {driver.email}</Typography>
             )}
           </Stack>
-          <Stack
-            direction='row'
-            alignItems='center'
-            spacing={1}
-            sx={{ mb: 2 }}
-          >
+          <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+            <PhoneIcon sx={{ color: indigo[400] }} />
+            {editing ? (
+              <TextField
+                label="Téléphone"
+                name="phone"
+                variant="outlined"
+                size="small"
+                value={driver.phone || ''}
+                onChange={handleInputChange}
+                fullWidth
+              />
+            ) : (
+              <Typography variant="body1"><strong>Téléphone :</strong> {driver.phone}</Typography>
+            )}
+          </Stack>
+          <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
             <BusinessIcon sx={{ color: indigo[400] }} />
             {editing ? (
               <TextField
-                label='Entreprise'
-                name='company'
-                variant='outlined'
-                size='small'
-                value={client.company || ''}
+                label="Entreprise"
+                name="company"
+                variant="outlined"
+                size="small"
+                value={driver.company || ''}
                 onChange={handleInputChange}
                 fullWidth
               />
             ) : (
-              <Typography variant="body1"><strong>Entreprise :</strong> {client.company}</Typography>
+              <Typography variant="body1"><strong>Entreprise :</strong> {driver.company}</Typography>
             )}
           </Stack>
-        </Box>
-
-        <Divider sx={{ mb: 4 }}>
-          <Chip
-            label="Informations de l'Agence"
-            color='primary'
-            variant='outlined'
-          />
-        </Divider>
-
-        <Box sx={{ textAlign: 'left', mb: 4, px: 4 }}>
-          <Stack
-            direction='row'
-            alignItems='center'
-            spacing={1}
-            sx={{ mb: 2 }}
-          >
+          <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
             <LocationOnIcon sx={{ color: indigo[400] }} />
             {editing ? (
-              <FormControl
-                fullWidth
-                variant='outlined'
-              >
-                <InputLabel id='agency-select-label'>Agence</InputLabel>
+              <FormControl fullWidth variant="outlined">
+                <InputLabel id="agency-select-label">Agence</InputLabel>
                 <Select
-                  labelId='agency-select-label'
+                  labelId="agency-select-label"
                   value={agency?.id_agency || ''}
                   onChange={handleAgencyChange}
-                  label='Agence'
+                  label="Agence"
                 >
-                  {agencies.map(agency => (
-                    <MenuItem
-                      key={agency.id_agency}
-                      value={agency.id_agency}
-                    >
+                  {agencies.map((agency) => (
+                    <MenuItem key={agency.id_agency} value={agency.id_agency}>
                       {agency.city} - {agency.address}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
             ) : (
-              <Typography variant='body1'>
-                <strong>Agence :</strong>{' '}
-                {agency ? `${agency.city} - ${agency.address}` : 'Non spécifiée'}
-              </Typography>
+              <Typography variant="body1"><strong>Agence :</strong> {agency ? `${agency.city} - ${agency.address}` : 'Non spécifiée'}</Typography>
             )}
           </Stack>
         </Box>
-        <Snackbar
-          open={openSnackbar}
-          autoHideDuration={6000}
-          onClose={handleCloseSnackbar}
-        >
-          <Alert
-            onClose={handleCloseSnackbar}
-            severity={snackbarSeverity}
-            sx={{ width: '100%' }}
-          >
+
+        <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+          <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
             {snackbarMessage}
           </Alert>
         </Snackbar>
@@ -458,5 +333,4 @@ const Profil = () => {
   );
 };
 
-
-export default Profil;
+export default ProfilDriver;

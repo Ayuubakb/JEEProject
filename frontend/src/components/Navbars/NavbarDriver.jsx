@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link  , useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Box, IconButton, InputBase, Menu, MenuItem, Tooltip, Fade, Typography} from '@mui/material';
+import { Box, IconButton, InputBase, Menu, MenuItem, Tooltip, Fade } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -21,9 +21,9 @@ const Navbar = ({ sidebarExpanded }) => {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-  const handleProfile = () => {
+  const handleProfiledriver = () => {
     handleMenuClose();
-    navigate(`/client/${userId}/profil`);
+    navigate(`/driver/${userId}/profildriver`);
   };
   const handleLogout = () => {
     dispatch(logout());
@@ -53,21 +53,7 @@ const Navbar = ({ sidebarExpanded }) => {
       </Box>
 
       <Box sx={styles.userSection}>
-        {balance !== null && (
-          <Typography
-            variant='subtitle1'
-            sx={{ marginRight: '20px', fontWeight: 'bold', color: '#FFD808', fontSize: '18px' }}
-          >
-            Balance: {balance} MAD
-          </Typography>
-        )}
-
-        <Tooltip
-          title='Notifications'
-          arrow
-          TransitionComponent={Fade}
-          TransitionProps={{ timeout: 600 }}
-        >
+        <Tooltip title="Notifications" arrow TransitionComponent={Fade} TransitionProps={{ timeout: 600 }}>
           <IconButton sx={styles.icon}>
             <NotificationsIcon />
           </IconButton>
@@ -90,7 +76,7 @@ const Navbar = ({ sidebarExpanded }) => {
           onClose={handleMenuClose}
           PaperProps={{ sx: styles.menu }}
         >
-          <MenuItem onClick={handleProfile}>Profil</MenuItem>
+          <MenuItem onClick={handleProfiledriver}>Profil</MenuItem>
           <MenuItem onClick={handleLogout}>Déconnexion</MenuItem>
         </Menu>
       </Box>

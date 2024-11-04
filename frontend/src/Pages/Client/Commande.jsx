@@ -153,7 +153,6 @@ const Commande = () => {
       >
         Commande
       </Typography>
-
       {/* Live price display */}
       <Typography
         variant='h5'
@@ -255,7 +254,6 @@ const Commande = () => {
           variant='outlined'
           margin='normal'
         />
-
         <Button
           type='submit'
           variant='contained'
@@ -265,6 +263,14 @@ const Commande = () => {
           Submit Order
         </Button>
       </form>
+      {responseMessage && (
+        <Typography
+          variant='body1'
+          sx={{ mt: 2, color: 'green' }}
+        >
+          {responseMessage}
+        </Typography>
+      )}
     </Box>
   );
 };

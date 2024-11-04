@@ -90,37 +90,6 @@ public class Utils {
         return driverDtos;
     }
 
-//    public List<AgencyDto> generateAgencyProjection(List<Agency> agencies){
-//        List<AgencyDto> agencyDtos =new ArrayList<>();
-//        agencies.forEach(a ->{
-//            List<User> users=a.getUsers();
-//            int numManagers = 0;
-//            int numClients= 0;
-//            int numDrivers = 0;
-//            for(int i=0;i<users.size();i++){
-//                switch (users.get(i).getRole()){
-//                    case Roles.Driver :
-//                        numDrivers++;
-//                        break;
-//                    case Roles.Manager:
-//                        numManagers++;
-//                    case Roles.Client:
-//                        numClients++;
-//                }
-//            };
-//            AgencyDto ap=new AgencyDto(
-//                a.getId_agency(),
-//                a.getAddress(),
-//                a.getCity(),
-//                numManagers,
-//                numDrivers,
-//                numClients
-//            );
-//            agencyDtos.add(ap);
-//        });
-//        return agencyDtos;
-//    }
-
     public List<AgencyDto> generateAgencyProjection(List<Agency> agencies) {
         List<AgencyDto> agencyDtos = new ArrayList<>();
         agencies.forEach(a -> {

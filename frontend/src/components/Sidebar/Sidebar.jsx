@@ -104,13 +104,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       }}
     >
       <Box sx={styles.logoContainer}>
-        {sidebarExpanded && (
-          <img
-            src={logo}
-            alt='COLLIFAST Logo'
-            style={styles.logo}
-          />
-        )}
+        {sidebarExpanded && <img src={logo} alt="COLLIFAST Logo" style={styles.logo} />}
         <IconButton
           onClick={() => setSidebarExpanded(!sidebarExpanded)}
           sx={sidebarExpanded ? styles.collapseButtonExpanded : styles.collapseButtonCollapsed}
@@ -153,19 +147,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       </List>
       <Box sx={styles.logoutContainer}>
         <Divider sx={styles.divider} />
-        <ListItemButton
-          component={Link}
-          onClick={handleLogout}
-          sx={styles.logoutButton}
-        >
+        <ListItemButton onClick={handleLogout} sx={{ color: '#EF4444', '&:hover': { backgroundColor: '#FEF2F2' } }}>
           <ListItemIcon>
             <LogoutIcon sx={{ color: '#EF4444' }} />
           </ListItemIcon>
           {sidebarExpanded && (
-            <ListItemText
-              primary='Déconnexion'
-              primaryTypographyProps={{ fontSize: '0.85rem', color: '#EF4444', fontWeight: 'bold' }}
-            />
+            <ListItemText primary="Déconnexion" primaryTypographyProps={{ fontSize: '0.85rem', color: '#EF4444', fontWeight: 'bold' }} />
           )}
         </ListItemButton>
       </Box>
@@ -247,3 +234,4 @@ const styles = {
 };
 
 export default Sidebar;
+

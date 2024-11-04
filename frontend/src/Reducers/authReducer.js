@@ -1,4 +1,3 @@
-// src/Reducers/authReducer.js
 import { GET_CONECTED_USER_FAIL, GET_CONECTED_USER_SUCCESS, LOGIN_FAIL, LOGIN_SUCCESS, LOGOUT_SUCCESS } from "../Actions/types";
 
 const initialState = {
