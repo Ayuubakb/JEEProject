@@ -1,9 +1,9 @@
 // src/layouts/LayoutClient.jsx
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import Navbar from '../components/Navbars/Navbar';
-import Sidebar from '../components/Sidebar/Sidebar';
-import Footer from '../components/Footers/Footer';
+import Navbar from '../Components/Navbars/Navbar';
+import Sidebar from '../Components/Sidebar/Sidebar';
+import Footer from '../Components/Footers/Footer';
 
 const LayoutClient = () => {
   return (

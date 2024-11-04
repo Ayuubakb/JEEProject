@@ -2,12 +2,14 @@ package com.JEEproject.Backend.Controllers;
 
 
 import com.JEEproject.Backend.Models.Agency;
+import com.JEEproject.Backend.Models.Client;
 import com.JEEproject.Backend.Models.Manager;
 import com.JEEproject.Backend.Models.User;
 import com.JEEproject.Backend.DTOs.ManagerFilters;
 import com.JEEproject.Backend.DTOs.UserDto;
 import com.JEEproject.Backend.Repositories.AgencyRepository;
 import com.JEEproject.Backend.Repositories.ManagerRepository;
+import com.JEEproject.Backend.Repositories.UserRepository;
 import com.JEEproject.Backend.Templates.FiltersTemplates;
 import com.JEEproject.Backend.services.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,8 @@ public class ManagerController {
     ResponseEntity<String> stringInternalError= new ResponseEntity<>("Something Went Wrong", HttpStatus.INTERNAL_SERVER_ERROR);
     ResponseEntity<List<UserDto>> listInternalError= new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     ResponseEntity<UserDto> managerInternalError= new ResponseEntity<>(new UserDto(), HttpStatus.INTERNAL_SERVER_ERROR);
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping("/save")
     public ResponseEntity<String> addManager(@RequestBody Manager manager){
@@ -86,6 +90,48 @@ public class ManagerController {
         return new ResponseEntity<>(utils.generateUserProjection(tmp).getFirst(),HttpStatus.OK);
     }
 
-    // add update manager
+    @PostMapping("/update")
+    public ResponseEntity<String> updateManager(@RequestBody Manager newManager) {
+        Optional<User> managerOpt;
+        try {
+            managerOpt = managerRepo.findById(newManager.getId_user());
+        } catch (Exception e) {
+            return stringInternalError;
+        }
+
+        if (managerOpt.isEmpty())
+            return new ResponseEntity<>("Manager not found", HttpStatus.NOT_FOUND);
+
+        User existingManager = managerOpt.get();
+
+        if (!existingManager.getEmail().equals(newManager.getEmail()) && utils.mailExists(existingManager.getEmail(), newManager.getId_user()))
+            return new ResponseEntity<>("Email Already Used", HttpStatus.BAD_REQUEST);
+
+        Optional<Agency> agency;
+        try {
+            agency = agencyRepository.findAgencyByCity(newManager.getAgency().getCity());
+        } catch (Exception e) {
+            return stringInternalError;
+        }
+        if (agency.isEmpty())
+            return new ResponseEntity<>("Agency Not Found", HttpStatus.NOT_FOUND);
+
+        existingManager.setFirst_name(newManager.getFirst_name());
+        existingManager.setLast_name(newManager.getLast_name());
+        existingManager.setEmail(newManager.getEmail());
+        existingManager.setAgency(agency.get());
+
+        if (newManager.getPassword() != null && !newManager.getPassword().isEmpty()) {
+            newManager.setPassword(passwordEncoder.encode(newManager.getPassword()));
+        }
+        try {
+            userRepository.save(existingManager);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return stringInternalError;
+        }
+        return new ResponseEntity<>("Manager Updated", HttpStatus.OK);
+    }
+
 }
 

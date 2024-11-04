@@ -1,27 +1,27 @@
 import{
-    GET_USER_FAIL,
-    GET_USER_SUCCESS
+    GET_CLIENTS_FAIL,
+    GET_CLIENTS_SUCCESS
 } from "../Actions/types"
 
 const initialState={
-    user:{},
+    clients:[],
     loading:false,
     err:null
 }
 
-const userReducer=(state=initialState,action)=>{
+const clientReducer=(state=initialState,action)=>{
     switch(action.type){
-        case GET_USER_SUCCESS :
+        case GET_CLIENTS_SUCCESS :
             return {
                 ...state,
-                user:action.payload,
+                clients:action.payload,
                 loading:false,
                 err:null
             }
-        case GET_USER_FAIL:
+        case GET_CLIENTS_FAIL:
             return {
                 ...state,
-                user:action.payload,
+                clients:[],
                 loading:false,
                 err:"Something Went Wrong"
             }
@@ -29,4 +29,4 @@ const userReducer=(state=initialState,action)=>{
             return state
     }
 }
-export default userReducer;
+export default clientReducer;

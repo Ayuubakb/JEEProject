@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation,useNavigate } from 'react-router-dom';
 import {
   Box,
   List,
@@ -10,6 +10,7 @@ import {
   Divider,
   IconButton,
 } from '@mui/material';
+import { useDispatch,useSelector } from 'react-redux';
 import HomeIcon from '@mui/icons-material/Home';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
@@ -19,17 +20,27 @@ import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import MenuIcon from '@mui/icons-material/Menu';
+import GroupIcon from '@mui/icons-material/Group';
+import SavingsIcon from '@mui/icons-material/Savings';
 import logo from '../../assets/img/brand/COLLIFAST.png';
+import { logout } from '../../Actions/authAction';
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
+  const dispatch=useDispatch();
   const location = useLocation();
   const sidebarRef = useRef(null);
-
+  const navigate=useNavigate()
+  const role=useSelector(state=>state.authReducer.role);
   const [sidebarExpanded, setSidebarExpanded] = useState(
     localStorage.getItem('sidebar-expanded') === 'true'
   );
+  const [menuToShow,setMenuToShow]=useState([])
   const userId = localStorage.getItem('userId'); // Récupération de l'ID utilisateur
-
+  const handleLogout=async()=>{
+    const res=await dispatch(logout())
+    if(res.loggedOut)
+      window.location.href = '/landingPage.html';
+  }
   // Mise à jour des chemins avec l'ID utilisateur
   const menuItems = [
     { text: 'Gestion des Commandes', path: `/client/${userId}`, icon: <HomeIcon /> },
@@ -51,6 +62,32 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     },
     { text: 'Support', path: `/client/${userId}/support`, icon: <SupportAgentIcon /> },
   ];
+  const menuItemsManager = [
+    { text: 'Tableau de Borde', path: `/manager/${userId}`, icon: <HomeIcon /> },
+    {
+      text: 'Finance',
+      path: `/manager/${userId}/finances`,
+      icon: <SavingsIcon />,
+    },
+    {
+      text: 'Utilisateurs',
+      path: `/manager/${userId}/gestion-utilisateurs`,
+      icon: <GroupIcon />,
+    },
+    { text: 'Profil', path: `/manager/${userId}/profil`, icon: <PersonIcon /> },
+    {
+      text: 'Missions',
+      path: `/manager/${userId}/gestion-colliers-mission`,
+      icon: <LocalShippingIcon />,
+    }
+  ];
+
+  useEffect(()=>{
+    if(role=="Client")
+      setMenuToShow(menuItems)
+    else if(role=="Manager")
+      setMenuToShow(menuItemsManager)
+  },[role])
 
   useEffect(() => {
     localStorage.setItem('sidebar-expanded', sidebarExpanded);
@@ -83,7 +120,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       </Box>
       <Divider sx={styles.divider} />
       <List>
-        {menuItems.map((item, index) => (
+        {menuToShow.map((item, index) => (
           <Link
             to={item.path}
             style={styles.link}
@@ -118,7 +155,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
         <Divider sx={styles.divider} />
         <ListItemButton
           component={Link}
-          to='/auth/logout'
+          onClick={handleLogout}
           sx={styles.logoutButton}
         >
           <ListItemIcon>

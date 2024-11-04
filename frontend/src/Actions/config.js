@@ -10,7 +10,7 @@ export const getAuthConfig = () => {
 };
 
 export const getAuthConfigFile = () => {
-  const token = localStorage.getItem('access');
+  const token = localStorage.getItem('accessToken');
   return {
     headers: {
       'Content-Type': 'multipart/form-data',

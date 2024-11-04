@@ -28,9 +28,10 @@ public class ClientDto extends UserDto {
             String company,
             String address,
             float balance,
-            int numOrders
+            int numOrders,
+            Boolean is_active
     ){
-        super(id_user,first_name,last_name,email,role,add_date,id_agency,city);
+        super(id_user,first_name,last_name,email,role,add_date,id_agency,city,is_active);
         this.company=company;
         this.address=address;
         this.balance=balance;

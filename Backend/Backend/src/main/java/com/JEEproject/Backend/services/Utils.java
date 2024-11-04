@@ -37,7 +37,8 @@ public class Utils {
                     u.getRole(),
                     u.getAdd_date(),
                     u.getAgency().getId_agency(),
-                    u.getAgency().getCity()
+                    u.getAgency().getCity(),
+                    u.getIs_active()
             );
             userDto.add(up);
         });
@@ -59,7 +60,8 @@ public class Utils {
                     c.getCompany(),
                     c.getAddress(),
                     c.getBalance(),
-                    c.getOrders().size()
+                    c.getOrders().size(),
+                    c.getIs_active()
             );
             clientDtos.add(client);
         });
@@ -80,7 +82,8 @@ public class Utils {
                     d.getAgency().getCity(),
                     d.getDriver_type(),
                     d.getIs_available(),
-                    d.getMissions().size()
+                    d.getMissions().size(),
+                    d.getIs_active()
             );
             driverDtos.add(driver);
         });

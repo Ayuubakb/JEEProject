@@ -16,13 +16,14 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
 import logo from '../../assets/img/brand/COLLIFAST.png';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const Navbar = ({ sidebarExpanded }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [balance, setBalance] = useState(null);
   const userId = localStorage.getItem('userId');
   const token = localStorage.getItem('accessToken');
-
+  const role=useSelector(state=>state.authReducer.role)
   useEffect(() => {
     const fetchBalance = async () => {
       try {
@@ -37,9 +38,9 @@ const Navbar = ({ sidebarExpanded }) => {
         console.error('Error fetching balance:', error);
       }
     };
-
-    fetchBalance();
-  }, [userId, token]);
+    if(role==="Client")
+      fetchBalance();
+  }, [userId, token, role]);
 
   const handleMenuOpen = event => {
     setAnchorEl(event.currentTarget);

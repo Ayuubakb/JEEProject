@@ -14,16 +14,16 @@ public class FiltersTemplates {
     JdbcTemplate jdbcTemplate;
 
     private final String managerQuery="" +
-            "SELECT u.id_user,u.first_name,u.last_name,u.role,u.email,u.add_date,a.id_agency,a.city " +
+            "SELECT u.id_user,u.first_name,u.last_name,u.role,u.email,u.add_date,a.id_agency,a.city,u.is_active " +
             "FROM users u INNER JOIN agencies a ON u.id_agency=a.id_agency " +
             "WHERE role='Manager'";
     private final String clientQuery="" +
-            "SELECT u.id_user,u.first_name,u.last_name,u.role,u.email,u.add_date,u.company,u.address,a.id_agency,a.city,COUNT(o.id_order) as numOrders " +
+            "SELECT u.id_user,u.first_name,u.last_name,u.role,u.email,u.add_date,u.company,u.address,a.id_agency,a.city,COUNT(o.id_order) as numOrders,u.is_active " +
             "FROM ((users u INNER JOIN agencies a ON u.id_agency=a.id_agency) " +
             "LEFT JOIN orders o ON o.id_client=u.id_user) " +
             "WHERE role='Client'";
     private final String driverQuery="" +
-            "SELECT u.id_user,u.first_name,u.last_name,u.role,u.email,u.add_date,u.driver_type,u.is_available,a.id_agency,a.city, COUNT(m.id_mission) as numMissions " +
+            "SELECT u.id_user,u.first_name,u.last_name,u.role,u.email,u.add_date,u.driver_type,u.is_available,a.id_agency,a.city, COUNT(m.id_mission) as numMissions,u.is_active " +
             "FROM ((users u INNER JOIN agencies a ON u.id_agency=a.id_agency) " +
             "LEFT JOIN missions m ON m.id_driver=u.id_user) " +
             "WHERE role='Driver'";
@@ -50,16 +50,17 @@ public class FiltersTemplates {
         if(filters.getCity()!=null)
             query+=" AND city='"+filters.getCity()+"'";
         if(!filters.getCompany().isEmpty())
-            query+=" AND company LIKE '%"+filters.getCompany()+"%'";
+            query+=" AND company ILIKE '%"+filters.getCompany()+"%'";
         query+=" GROUP BY u.id_user,u.first_name,u.last_name,u.role,u.email,u.add_date,a.id_agency,a.city";
         if(!filters.getSortByDate().isEmpty()){
             String tmp= filters.getSortByDate().toUpperCase();
             query += " ORDER BY add_date "+tmp;
         }
         if(!filters.getSortByOrders().isEmpty()){
-            String tmp= filters.getSortByDate().toUpperCase();
+            String tmp= filters.getSortByOrders().toUpperCase();
             query += " ORDER BY COUNT(o.id_order) "+tmp;
         }
+        System.out.println(query);
         return jdbcTemplate.query(query,new BeanPropertyRowMapper<ClientDto>(ClientDto.class));
     }
     public List<DriverDto> getDrivers(DriverFilters filters){
@@ -77,6 +78,7 @@ public class FiltersTemplates {
             String tmp=filters.getSortByMissions().toUpperCase();
             query += " ORDER BY COUNT(m.id_mission) "+tmp;
         }
+        System.out.println(query);
         return jdbcTemplate.query(query, new BeanPropertyRowMapper<DriverDto>(DriverDto.class));
     }
     public List<OrderDto> getOrders(OrderFilters orderFilters){
@@ -93,6 +95,13 @@ public class FiltersTemplates {
             else
                 query+=" WHERE";
             query+=" tracking_status='"+orderFilters.getTracking_status()+"'";
+        }
+        if(orderFilters.getCity()!=null){
+            if(whereAdded)
+                query+=" AND";
+            else
+                query+=" WHERE";
+            query+=" (a.city='"+orderFilters.getCity()+"' OR r.city='"+orderFilters.getCity()+"')";
         }
         if(!orderFilters.getSortByDate().isEmpty()) {
             query += " ORDER BY o.date " + orderFilters.getSortByDate().toUpperCase();
