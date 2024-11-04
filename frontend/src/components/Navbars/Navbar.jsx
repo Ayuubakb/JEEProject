@@ -1,19 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { Link  , useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Box, IconButton, InputBase, Menu, MenuItem, Tooltip, Fade, Typography} from '@mui/material';
+import {
+  Box,
+  IconButton,
+  InputBase,
+  Menu,
+  MenuItem,
+  Tooltip,
+  Fade,
+  Typography,
+} from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
 import logo from '../../assets/img/brand/COLLIFAST.png';
-import {logout} from '../../Actions/authAction';
+import { logout } from '../../Actions/authAction';
 import axios from 'axios';
 
 const Navbar = ({ sidebarExpanded }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
+  const handleMenuOpen = event => {
+    setAnchorEl(event.currentTarget);
+  };
   const [balance, setBalance] = useState(null);
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem('accessToken');
@@ -35,10 +47,6 @@ const Navbar = ({ sidebarExpanded }) => {
 
     fetchBalance();
   }, [userId, token]);
-
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
@@ -75,10 +83,11 @@ const Navbar = ({ sidebarExpanded }) => {
       </Box>
 
       <Box sx={styles.userSection}>
+        {/* Display the user balance */}
         {balance !== null && (
           <Typography
             variant='subtitle1'
-            sx={{ marginRight: '20px', fontWeight: 'bold', color: '#FFD808', fontSize: '18px' }}
+            sx={{ marginRight: '20px', fontWeight: 'bold', color: 'gold' }}
           >
             Balance: {balance} MAD
           </Typography>

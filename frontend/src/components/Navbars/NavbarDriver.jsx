@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
+<<<<<<< HEAD
 import { Link  , useNavigate } from 'react-router-dom';
+=======
+import { Link, useNavigate } from 'react-router-dom';
+>>>>>>> 7aeb38a1638abbc301b259cc0a2178696bbc8e14
 import { useDispatch } from 'react-redux';
 import { Box, IconButton, InputBase, Menu, MenuItem, Tooltip, Fade } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -7,14 +11,23 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
 import logo from '../../assets/img/brand/COLLIFAST.png';
+<<<<<<< HEAD
 import {logout} from '../../Actions/authAction';
+=======
+import { logout } from '../../Actions/authAction';
+>>>>>>> 7aeb38a1638abbc301b259cc0a2178696bbc8e14
 
 const Navbar = ({ sidebarExpanded }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
+<<<<<<< HEAD
   const userId = localStorage.getItem("userId");
   const handleMenuOpen = (event) => {
+=======
+  const userId = localStorage.getItem('userId');
+  const handleMenuOpen = event => {
+>>>>>>> 7aeb38a1638abbc301b259cc0a2178696bbc8e14
     setAnchorEl(event.currentTarget);
   };
 
@@ -31,6 +44,7 @@ const Navbar = ({ sidebarExpanded }) => {
   };
 
   return (
+<<<<<<< HEAD
     <Box sx={{ 
         ...styles.navbar, 
         width: sidebarExpanded ? 'calc(100% - 250px)' : '100%', 
@@ -47,26 +61,85 @@ const Navbar = ({ sidebarExpanded }) => {
       }}>
         <InputBase
           placeholder="Recherche..."
+=======
+    <Box
+      sx={{
+        ...styles.navbar,
+        width: sidebarExpanded ? 'calc(100% - 250px)' : '100%',
+        left: sidebarExpanded ? '250px' : '0',
+      }}
+    >
+      <Box sx={styles.logoContainer}>
+        {sidebarExpanded && (
+          <img
+            src={logo}
+            alt='Logo COLLIFAST'
+            style={styles.logo}
+          />
+        )}
+      </Box>
+
+      <Box
+        sx={{
+          ...styles.searchContainer,
+          marginLeft: sidebarExpanded ? 'auto' : '30px',
+        }}
+      >
+        <InputBase
+          placeholder='Recherche...'
+>>>>>>> 7aeb38a1638abbc301b259cc0a2178696bbc8e14
           startAdornment={<SearchIcon sx={styles.searchIcon} />}
           sx={styles.searchInput}
         />
       </Box>
 
       <Box sx={styles.userSection}>
+<<<<<<< HEAD
         <Tooltip title="Notifications" arrow TransitionComponent={Fade} TransitionProps={{ timeout: 600 }}>
+=======
+        <Tooltip
+          title='Notifications'
+          arrow
+          TransitionComponent={Fade}
+          TransitionProps={{ timeout: 600 }}
+        >
+>>>>>>> 7aeb38a1638abbc301b259cc0a2178696bbc8e14
           <IconButton sx={styles.icon}>
             <NotificationsIcon />
           </IconButton>
         </Tooltip>
+<<<<<<< HEAD
         <Tooltip title="Paramètres" arrow TransitionComponent={Fade} TransitionProps={{ timeout: 600 }}>
+=======
+        <Tooltip
+          title='Paramètres'
+          arrow
+          TransitionComponent={Fade}
+          TransitionProps={{ timeout: 600 }}
+        >
+>>>>>>> 7aeb38a1638abbc301b259cc0a2178696bbc8e14
           <IconButton sx={styles.icon}>
             <SettingsIcon />
           </IconButton>
         </Tooltip>
 
+<<<<<<< HEAD
         <Tooltip title="Compte Utilisateur" arrow TransitionComponent={Fade} TransitionProps={{ timeout: 600 }}>
           <Box sx={styles.userInfo} onClick={handleMenuOpen}>
             <AccountCircleIcon sx={styles.userIcon} />                                      
+=======
+        <Tooltip
+          title='Compte Utilisateur'
+          arrow
+          TransitionComponent={Fade}
+          TransitionProps={{ timeout: 600 }}
+        >
+          <Box
+            sx={styles.userInfo}
+            onClick={handleMenuOpen}
+          >
+            <AccountCircleIcon sx={styles.userIcon} />
+>>>>>>> 7aeb38a1638abbc301b259cc0a2178696bbc8e14
           </Box>
         </Tooltip>
 
@@ -175,4 +248,8 @@ const styles = {
   },
 };
 
+<<<<<<< HEAD
 export default Navbar;
+=======
+export default Navbar;
+>>>>>>> 7aeb38a1638abbc301b259cc0a2178696bbc8e14

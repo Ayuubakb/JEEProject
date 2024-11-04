@@ -2,6 +2,7 @@ package com.JEEproject.Backend.Models;
 
 import com.JEEproject.Backend.Enums.OrderType;
 import com.JEEproject.Backend.Enums.TrackingStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -46,6 +47,11 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "id_receiver")
     private Receiver receiver;
+    @ManyToOne
+    @JoinColumn(name = "id_mission", nullable = true) // Ajoutez nullable = true
+    @JsonBackReference
+    private Mission mission;
+
 
     public Order() {
     }

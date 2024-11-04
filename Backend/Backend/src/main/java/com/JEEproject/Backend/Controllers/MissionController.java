@@ -20,7 +20,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 import java.time.Instant;
+<<<<<<< HEAD
 import java.util.*;
+=======
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+>>>>>>> 7aeb38a1638abbc301b259cc0a2178696bbc8e14
 import java.util.stream.Collectors;
 
 @RestController
@@ -245,6 +252,7 @@ public class MissionController {
         }
     }
 
+<<<<<<< HEAD
     @PostMapping(value = "/add", consumes = {"application/json", "application/json;charset=UTF-8"})
     public ResponseEntity<String> addMission(@RequestBody Mission newMission) {
         Mission mission=new Mission(
@@ -261,4 +269,62 @@ public class MissionController {
         }
         return new ResponseEntity<>("Created",HttpStatus.OK);
     }
+=======
+    @PutMapping("/updateTrackingStatus/{driverId}/{orderId}")
+    public ResponseEntity<String> updateTrackingStatus(
+            @PathVariable int driverId,
+            @PathVariable int orderId,
+            @RequestParam TrackingStatus newStatus
+    ) {
+        try {
+            // Vérification que le chauffeur existe
+            Driver driver = driverRepo.findById(driverId)
+                    .orElseThrow(() -> new RuntimeException("Driver not found"));
+
+            // Récupération de la commande
+            Order order = orderRepo.findById(orderId)
+                    .orElseThrow(() -> new RuntimeException("Order not found"));
+
+            // Vérifier si l'ordre est associé à une mission dans mission_details
+            List<Mission> missions = order.getMissions().stream()
+                    .filter(mission -> mission.getDriver().getId_user() == driverId)
+                    .collect(Collectors.toList());
+
+            if (missions.isEmpty()) {
+                return new ResponseEntity<>("Order is not associated with any mission for this driver.", HttpStatus.BAD_REQUEST);
+            }
+
+            // Utiliser la première mission associée si plusieurs existent
+            Mission mission = missions.get(0);
+
+            // Vérification si la mission appartient au chauffeur
+            if (mission.getDriver().getId_user() != driverId) {
+                return new ResponseEntity<>("Unauthorized: Mission does not belong to the driver", HttpStatus.UNAUTHORIZED);
+            }
+
+            // Mise à jour du statut de suivi de l'ordre
+            order.setTracking_status(newStatus);
+            orderRepo.save(order);
+
+            // Vérifier si le nouveau statut est "Delivered"
+            if (newStatus == TrackingStatus.Delivered) {
+                // Vérifier si tous les ordres de la mission sont "Delivered"
+                boolean allOrdersDelivered = mission.getOrders().stream()
+                        .allMatch(o -> o.getTracking_status() == TrackingStatus.Delivered);
+
+                if (allOrdersDelivered) {
+                    // Mettre à jour la mission comme terminée
+                    mission.setIs_done(true);
+                    missionRepo.save(mission);
+                }
+            }
+
+            return new ResponseEntity<>("Tracking status updated successfully to " + newStatus, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Failed to update tracking status: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+>>>>>>> 7aeb38a1638abbc301b259cc0a2178696bbc8e14
 }

@@ -26,7 +26,7 @@ import SuiviLivraisons from './Pages/Manager/SuiviLivraisons';
 import LayoutDriver from './layouts/LayoutDriver';
 import LayoutManager from './layouts/LayoutManager'
 import MissionsAVenir from './Pages/Driver/MissionsAVenir';
-import ConfirmationMission from './Pages/Driver/ConfirmationMission';
+import ProfilDriver from './Pages/Driver/ProfilDriver';
 import HistoriqueMissions from './Pages/Driver/HistoriqueMissions';
 import ManagerProfile from './Pages/Manager/ManagerProfile';
 import ProfilDriver from './Pages/Driver/ProfilDriver'
@@ -126,12 +126,24 @@ function App() {
 
             {/* Routes Chauffeur Sécurisées */}
             <Route element={<PrivateRoute />}>
-  <Route path='/driver/:id' element={<LayoutDriver />}>
-    <Route index element={<MissionsAVenir />} />
-    <Route path='profildriver' element={<ProfilDriver />} />
-    <Route path='historique-missions' element={<HistoriqueMissions />} />
-  </Route>
-</Route>
+              <Route
+                path='/driver/:id'
+                element={<LayoutDriver />}
+              >
+                <Route
+                  index
+                  element={<MissionsAVenir />}
+                />
+                <Route
+                  path='profildriver'
+                  element={<ProfilDriver />}
+                />
+                <Route
+                  path='historique-missions'
+                  element={<HistoriqueMissions />}
+                />
+              </Route>
+            </Route>
           </Routes>
         </Provider>
       </BrowserRouter>

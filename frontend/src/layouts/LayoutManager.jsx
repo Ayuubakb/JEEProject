@@ -1,9 +1,9 @@
 import { useDispatch,useSelector } from 'react-redux';
 import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
-import Navbar from '../Components/Navbars/Navbar';
-import Sidebar from '../Components/Sidebar/Sidebar';
-import Footer from '../Components/Footers/Footer';
+import Navbar from '../components/Navbars/Navbar';
+import Sidebar from '../components/Sidebar/Sidebar';
+import Footer from '../components/Footers/Footer';
 import { getOrders } from '../Actions/ordersAction';
 import { getClients } from '../Actions/clientAction';
 import { getConnectedUser } from '../Actions/authAction';
