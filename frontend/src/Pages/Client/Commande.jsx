@@ -77,41 +77,6 @@ const Commande = () => {
     calculatePrice();
   }, [orderData.weight, orderData.receiver.city, orderData.orderType]);
 
-  // const handleSubmit = async e => {
-  //   e.preventDefault();
-  //   const clientId = localStorage.getItem('userId');
-  //   const token = localStorage.getItem('accessToken');
-
-  //   const orderPayload = {
-  //     ...orderData,
-  //     client: { id_user: clientId },
-  //     priority: 0,
-  //     tracking_status: '',
-  //     receiver: {
-  //       ...orderData.receiver,
-  //     },
-  //   };
-
-  //   try {
-  //     const receiverResponse = await axios.post(
-  //       `${process.env.REACT_APP_SERVER_URI}/receiver/save`,
-  //       orderData.receiver,
-  //       {
-  //         headers: { Authorization: `Bearer ${token}` },
-  //       }
-  //     );
-
-  //     orderPayload.receiver.id_receiver = receiverResponse.data;
-
-  //     await axios.post(`${process.env.REACT_APP_SERVER_URI}/order/save`, orderPayload, {
-  //       headers: { Authorization: `Bearer ${token}` },
-  //     });
-  //     alert('Order created successfully');
-  //   } catch (error) {
-  //     console.error('Error submitting order:', error);
-  //   }
-  // };
-
   const handleSubmit = async e => {
     e.preventDefault();
     const clientId = localStorage.getItem('userId');

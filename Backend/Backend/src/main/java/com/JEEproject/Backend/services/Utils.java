@@ -198,7 +198,7 @@ public class Utils {
                     bank.getCardnum(),
                     bank.getCvv(),
                     bank.getExpiry_y(),
-                    bank.getExpiry_y(),
+                    bank.getExpiry_m(),
                     bank.getBalance()
             );
             bankDtos.add(tmp);
