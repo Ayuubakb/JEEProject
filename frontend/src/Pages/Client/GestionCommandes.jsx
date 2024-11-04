@@ -21,16 +21,16 @@ const GestionCommandes = () => {
         const authConfig = getAuthConfig();
 
         // Fetch client details
-        const clientResponse = await axios.get(`/client/get/id/${userId}`, authConfig);
+        const clientResponse = await axios.get(`${process.env.REACT_APP_SERVER_URI}/client/get/id/${userId}`, authConfig);
         setClient(clientResponse.data);
 
         // Fetch client-specific orders using a filter
         const orderFilters = { clientId: userId }; // Modify as needed for your backend filtering
-        const commandesResponse = await axios.post(`/order/get`, orderFilters, authConfig);
+        const commandesResponse = await axios.get(`${process.env.REACT_APP_SERVER_URI}/order/client/${userId}`, authConfig);
         setCommandes(commandesResponse.data);
 
         // Fetch transactions
-        const transactionsResponse = await axios.get(`/transactions/get/client/${userId}`, authConfig);
+        const transactionsResponse = await axios.get(`${process.env.REACT_APP_SERVER_URI}/transactions/get/client/${userId}`, authConfig);
         setTransactions(transactionsResponse.data);
 
       } catch (error) {
@@ -119,8 +119,8 @@ const GestionCommandes = () => {
               <Typography variant="h6" gutterBottom>Dernières Commandes</Typography>
               {commandes.slice(0, 5).map((commande) => (
                 <Box key={commande.id} sx={{ mb: 2 }}>
-                  <Typography variant="body1">Commande ID: {commande.id}</Typography>
-                  <Typography variant="body2">Statut: {commande.status}</Typography>
+                  <Typography variant="body1">Commande ID: {commande.id_order}</Typography>
+                  <Typography variant="body2">Statut: {commande.tracking_status}</Typography>
                   <Typography variant="body2">Date: {new Date(commande.date).toLocaleDateString()}</Typography>
                   <Divider sx={{ my: 1 }} />
                 </Box>

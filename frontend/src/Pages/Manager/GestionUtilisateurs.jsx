@@ -14,8 +14,7 @@ const GestionUtilisateurs = () => {
     const [driversToShow,setDriversToShow]=useState([])
     const [clientFilters,setClientFilters]=useState({sortByDate:"",sortByOrders:"",city:null,company:""})
     const [driverFilters,setDriverFilters]=useState({name:"",sortByDate:"",sortByMissions:"",city:null,driver_type:null,is_available:""})
-    console.log(driverFilters);
-    
+   
     const handleInputChange=(e,setFilter)=>{
         setFilter((prev)=>{return {...prev,[e.target.name]:e.target.value}})
     }

@@ -8,12 +8,34 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
 import logo from '../../assets/img/brand/COLLIFAST.png';
 import {logout} from '../../Actions/authAction';
+import axios from 'axios';
 
 const Navbar = ({ sidebarExpanded }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [balance, setBalance] = useState(null);
   const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem('accessToken');
+
+  useEffect(() => {
+    const fetchBalance = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_SERVER_URI}/client/get/id/${userId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setBalance(response.data.balance);
+      } catch (error) {
+        console.error('Error fetching balance:', error);
+      }
+    };
+
+    fetchBalance();
+  }, [userId, token]);
+
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };

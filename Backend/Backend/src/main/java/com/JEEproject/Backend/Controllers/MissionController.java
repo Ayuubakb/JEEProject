@@ -20,10 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -246,5 +243,22 @@ public class MissionController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PostMapping(value = "/add", consumes = {"application/json", "application/json;charset=UTF-8"})
+    public ResponseEntity<String> addMission(@RequestBody Mission newMission) {
+        Mission mission=new Mission(
+                newMission.getMission_type(),
+                newMission.getFrom_city(),
+                newMission.getTo_city(),
+                newMission.getDriver(),
+                newMission.getOrders()
+        );
+        try {
+            missionRepo.save(mission);
+        }catch (Exception e) {
+            return new ResponseEntity<>("Failed to add mission: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>("Created",HttpStatus.OK);
     }
 }

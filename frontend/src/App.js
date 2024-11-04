@@ -29,6 +29,7 @@ import MissionsAVenir from './Pages/Driver/MissionsAVenir';
 import ConfirmationMission from './Pages/Driver/ConfirmationMission';
 import HistoriqueMissions from './Pages/Driver/HistoriqueMissions';
 import ManagerProfile from './Pages/Manager/ManagerProfile';
+import ProfilDriver from './Pages/Driver/ProfilDriver'
 
 function App() {
   if (window.location.pathname === '/') {

@@ -43,6 +43,10 @@ const ManagerProfile = () => {
       })
   },[userInfos])
   const [toModify,setToModify]=useState(false);
+  useEffect(()=>{
+    if(toModify===true)
+      setErr({err:null,updated:false})
+  },[toModify])
   
   return (
     <section className='profile'>
@@ -50,8 +54,8 @@ const ManagerProfile = () => {
           <h1>Bienvenue,<br></br> {infos.first_name} {infos.last_name}</h1>
           {
             !toModify?
-            <button onClick={()=>setToModify(true)}> <EditIcon/> Modifier Mon Profile</button>
-            :<button onClick={handleModify}> <SaveIcon/> Enregistrer les modifications</button>
+            <button onClick={()=>setToModify(true)} style={{color:"white",backgroundColor:"blue"}}> <EditIcon/> Modifier Mon Profile</button>
+            :<button onClick={handleModify} style={{color:"white", backgroundColor:"green"}}> <SaveIcon/> Enregistrer les modifications</button>
           }
       </div>
       {

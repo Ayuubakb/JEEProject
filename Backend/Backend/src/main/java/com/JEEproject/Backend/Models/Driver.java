@@ -20,7 +20,7 @@ public class Driver extends User {
     public MissionType driver_type;
     public Boolean is_available;
     @OneToMany(mappedBy = "driver")
-    @JsonIgnore // Ignore cette relation pour éviter les cycles
+   //Ignore cette relation pour éviter les cycles
     private List<Mission> missions = new ArrayList<>();
 
     public Driver() {

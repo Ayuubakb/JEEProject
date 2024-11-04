@@ -38,7 +38,7 @@ public class Mission {
 
     @ManyToOne
     @JoinColumn(name = "id_driver")
-    @JsonBackReference // Évite la boucle en ne sérialisant pas cette référence
+     // Évite la boucle en ne sérialisant pas cette référence
     private Driver driver;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
@@ -47,7 +47,7 @@ public class Mission {
             joinColumns = {@JoinColumn(name = "id_mission")},
             inverseJoinColumns = {@JoinColumn(name = "id_order")}
     )
-    @JsonManagedReference
+
     private List<Order> orders = new ArrayList<>();
 
     public Mission() {
@@ -60,5 +60,15 @@ public class Mission {
         this.end_date = null;
         this.from_city = From;
         this.to_city = To;
+    }
+    public Mission(MissionType mission_type, Cities From, Cities To,Driver driver,List<Order> orders) {
+        this.is_done = false;
+        this.mission_type = mission_type;
+        this.start_date = new Date();
+        this.end_date = null;
+        this.from_city = From;
+        this.to_city = To;
+        this.driver = driver;
+        this.orders=orders;
     }
 }

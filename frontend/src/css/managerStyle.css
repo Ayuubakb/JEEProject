@@ -127,7 +127,8 @@
     text-align: center;
     color: gray;
     background-color: transparent;
-    border: solid 1px gray;
+    border: none;
+    border-radius: 10px;
     margin-top: 10px;
     font-size: 18px;
     padding: 10px 10px;
@@ -155,7 +156,8 @@
     margin-bottom: 5px;
     display: flex;
     align-items: center;
-    gap:10px
+    gap:10px;
+    color: blue;
 }
 .profile .infoPerso div input , .profile .agencyInfo select{
     padding: 7px;
@@ -227,10 +229,11 @@
 .styled-table {
     width: 95%;
     border-collapse: collapse;
-    font-family: Arial, sans-serif;
+    font-family:'Franklin Gothic Medium';
     font-size: 16px;
-    color: #333;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #212121;
+    border-radius: 25px;
+    overflow: hidden;
 }
 
 .styled-table thead tr {
@@ -255,4 +258,27 @@
 
 .styled-table tbody td {
     color: #555;
+}
+.gestionMissions{
+    width: 90%;
+    margin-left: 5%;
+}
+.missionsContainer{
+    margin-top: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-items: space-around;
+    gap: 1%;
+}
+.missionsContainer .card{
+    flex: 0 0 59%;
+    margin-bottom: 25px;
+}
+.filterMissions select{
+    width: 40%;
+    margin-left: 30%;
+    padding: 10px;
+    border: solid 1px rgb(164, 164, 164);
+    border-radius: 15px;
 }

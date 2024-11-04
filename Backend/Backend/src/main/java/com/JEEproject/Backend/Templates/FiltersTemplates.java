@@ -60,7 +60,6 @@ public class FiltersTemplates {
             String tmp= filters.getSortByOrders().toUpperCase();
             query += " ORDER BY COUNT(o.id_order) "+tmp;
         }
-        System.out.println(query);
         return jdbcTemplate.query(query,new BeanPropertyRowMapper<ClientDto>(ClientDto.class));
     }
     public List<DriverDto> getDrivers(DriverFilters filters){
@@ -78,7 +77,6 @@ public class FiltersTemplates {
             String tmp=filters.getSortByMissions().toUpperCase();
             query += " ORDER BY COUNT(m.id_mission) "+tmp;
         }
-        System.out.println(query);
         return jdbcTemplate.query(query, new BeanPropertyRowMapper<DriverDto>(DriverDto.class));
     }
     public List<OrderDto> getOrders(OrderFilters orderFilters){

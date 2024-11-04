@@ -65,11 +65,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const menuItemsManager = [
     { text: 'Tableau de Borde', path: `/manager/${userId}`, icon: <HomeIcon /> },
     {
-      text: 'Finance',
-      path: `/manager/${userId}/finances`,
-      icon: <SavingsIcon />,
-    },
-    {
       text: 'Utilisateurs',
       path: `/manager/${userId}/gestion-utilisateurs`,
       icon: <GroupIcon />,
@@ -77,7 +72,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     { text: 'Profil', path: `/manager/${userId}/profil`, icon: <PersonIcon /> },
     {
       text: 'Missions',
-      path: `/manager/${userId}/gestion-colliers-mission`,
+      path: `/manager/${userId}/gestion-colliers-missions`,
       icon: <LocalShippingIcon />,
     }
   ];

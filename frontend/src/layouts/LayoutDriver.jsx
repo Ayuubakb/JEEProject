@@ -1,8 +1,8 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import NavbarDriver from '../components/Navbars/NavbarDriver';
-import SidebarDriver from '../components/Sidebar/SidebarDriver';
-import Footer from '../components/Footers/Footer';
+import NavbarDriver from '../Components/Navbars/NavbarDriver';
+import SidebarDriver from '../Components/Sidebar/SidebarDriver';
+import Footer from '../Components/Footers/Footer';
 
 const LayoutDriver = () => {
   return (

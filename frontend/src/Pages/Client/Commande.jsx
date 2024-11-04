@@ -119,6 +119,7 @@ const Commande = () => {
           orderData.receiver,
           {
             headers: { Authorization: `Bearer ${token}` },
+            'Content-Type': 'application/json',
           }
         );
         receiverId = receiverResponse.data;
@@ -263,14 +264,14 @@ const Commande = () => {
           Submit Order
         </Button>
       </form>
-      {responseMessage && (
+      {/*responseMessage && (
         <Typography
           variant='body1'
           sx={{ mt: 2, color: 'green' }}
         >
           {responseMessage}
         </Typography>
-      )}
+      )*/}
     </Box>
   );
 };
