@@ -7,8 +7,6 @@
     <list default="true" id="6f266642-be75-43fb-b8e9-1dcffb902848" name="Changes" comment="backend repos">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/Backend/src/main/java/com/JEEproject/Backend/Controllers/MissionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Backend/src/main/java/com/JEEproject/Backend/Controllers/MissionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Backend/src/main/java/com/JEEproject/Backend/Models/Mission.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Backend/src/main/java/com/JEEproject/Backend/Models/Mission.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Backend/src/main/java/com/JEEproject/Backend/Models/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Backend/src/main/java/com/JEEproject/Backend/Models/Order.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +51,7 @@
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.BackendApplication.executor": "Run",
-    "git-widget-placeholder": "backup",
+    "git-widget-placeholder": "backup2",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/ayoub/JEEProject",
     "node.js.detected.package.eslint": "true",
@@ -96,7 +94,7 @@
       <updated>1729282742288</updated>
       <workItem from="1729282743325" duration="113877000" />
       <workItem from="1729951557608" duration="101392000" />
-      <workItem from="1730749127689" duration="9383000" />
+      <workItem from="1730749127689" duration="11726000" />
     </task>
     <task id="LOCAL-00001" summary="backend repos">
       <option name="closed" value="true" />

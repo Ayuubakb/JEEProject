@@ -254,13 +254,26 @@ public class MissionController {
                     .orElseThrow(() -> new RuntimeException("Order not found with ID: " + order.getIdOrder()));
             existingOrders.add(existingOrder);
         }
-        Mission mission=new Mission(
-                newMission.getMission_type(),
-                newMission.getFrom_city(),
-                newMission.getTo_city(),
-                newMission.getDriver(),
-                existingOrders
-        );
+
+        Optional<Mission> existingMissionOpt = existingOrders.stream()
+                .flatMap(order -> order.getMissions().stream())
+                .findFirst();
+
+        Mission mission;
+        if (existingMissionOpt.isPresent()) {
+
+            mission = existingMissionOpt.get();
+            mission.getOrders().getFirst().setTracking_status(newMission.getOrders().getFirst().getTracking_status());
+        } else {
+
+            mission = new Mission(
+                    newMission.getMission_type(),
+                    newMission.getFrom_city(),
+                    newMission.getTo_city(),
+                    newMission.getDriver(),
+                    existingOrders
+            );
+        }
         try {
             missionRepo.save(mission);
         }catch (Exception e) {
