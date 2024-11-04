@@ -1,10 +1,6 @@
 package com.JEEproject.Backend.Controllers;
 
 import com.JEEproject.Backend.Converters.OrderConverter;
-<<<<<<< HEAD
-
-=======
->>>>>>> 7aeb38a1638abbc301b259cc0a2178696bbc8e14
 import com.JEEproject.Backend.DTOs.OrderDto;
 import com.JEEproject.Backend.DTOs.OrderFilters;
 import com.JEEproject.Backend.Enums.Cities;
@@ -25,10 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-<<<<<<< HEAD
 
-=======
->>>>>>> 7aeb38a1638abbc301b259cc0a2178696bbc8e14
 
 @RestController
 @RequestMapping("/order")
@@ -119,6 +112,7 @@ public class OrderController {
     public ResponseEntity<String> updateTrackingStatus(@PathVariable int id, @PathVariable TrackingStatus newStatus) {
         try {
             Order order = orderRepo.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+            System.out.println(order.getIdOrder());
             order.setTracking_status(newStatus);
             orderRepo.save(order);
             return new ResponseEntity<>("Tracking status updated successfully.", HttpStatus.OK);

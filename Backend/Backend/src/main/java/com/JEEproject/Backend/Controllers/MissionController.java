@@ -20,14 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 import java.time.Instant;
-<<<<<<< HEAD
 import java.util.*;
-=======
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
->>>>>>> 7aeb38a1638abbc301b259cc0a2178696bbc8e14
 import java.util.stream.Collectors;
 
 @RestController
@@ -196,7 +189,6 @@ public class MissionController {
         }
     }
 
-    @Transactional
     @GetMapping("/driver/{driverId}")
     public ResponseEntity<List<MissionDto>> getMissionsByDriverId(@PathVariable int driverId) {
         try {
@@ -206,7 +198,7 @@ public class MissionController {
             List<Mission> missions = missionRepo.findByDriver(driver);
 
             if (missions.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>(new ArrayList<>(),HttpStatus.NO_CONTENT);
             }
 
             List<MissionDto> missionDtos = missions.stream().map(mission -> {
@@ -248,12 +240,13 @@ public class MissionController {
 
             return new ResponseEntity<>(missionDtos, HttpStatus.OK);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-<<<<<<< HEAD
-    @PostMapping(value = "/add", consumes = {"application/json", "application/json;charset=UTF-8"})
+
+    @PostMapping(value = "/add")
     public ResponseEntity<String> addMission(@RequestBody Mission newMission) {
         Mission mission=new Mission(
                 newMission.getMission_type(),
@@ -269,7 +262,7 @@ public class MissionController {
         }
         return new ResponseEntity<>("Created",HttpStatus.OK);
     }
-=======
+
     @PutMapping("/updateTrackingStatus/{driverId}/{orderId}")
     public ResponseEntity<String> updateTrackingStatus(
             @PathVariable int driverId,
@@ -326,5 +319,4 @@ public class MissionController {
     }
 
 
->>>>>>> 7aeb38a1638abbc301b259cc0a2178696bbc8e14
 }

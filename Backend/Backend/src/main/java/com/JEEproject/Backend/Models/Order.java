@@ -49,7 +49,6 @@ public class Order {
     private Receiver receiver;
     @ManyToOne
     @JoinColumn(name = "id_mission", nullable = true) // Ajoutez nullable = true
-    @JsonBackReference
     private Mission mission;
 
 

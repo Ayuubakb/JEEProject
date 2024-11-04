@@ -38,14 +38,6 @@ const TableauDeBord = () => {
                     <GroupIcon fontSize='large'/> {clients.length}
                 </div>
             </div>
-            <div className='element'>
-                <div className="title">
-                    Finance
-                </div>
-                <div className='data'>
-                    <SavingsIcon fontSize='large'/> 15000 DH
-                </div>
-            </div>
         </div>
         <OrderStatusChart/>
         <OrderTypeChart/>

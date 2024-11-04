@@ -3,6 +3,7 @@ package com.JEEproject.Backend.Models;
 import com.JEEproject.Backend.Enums.MissionType;
 import com.JEEproject.Backend.Enums.Roles;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,8 +20,7 @@ public class Driver extends User {
     @Enumerated(value = EnumType.STRING)
     public MissionType driver_type;
     public Boolean is_available;
-    @OneToMany(mappedBy = "driver")
-   //Ignore cette relation pour éviter les cycles
+    @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
     private List<Mission> missions = new ArrayList<>();
 
     public Driver() {

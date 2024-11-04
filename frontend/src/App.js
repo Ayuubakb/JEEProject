@@ -26,7 +26,6 @@ import SuiviLivraisons from './Pages/Manager/SuiviLivraisons';
 import LayoutDriver from './layouts/LayoutDriver';
 import LayoutManager from './layouts/LayoutManager'
 import MissionsAVenir from './Pages/Driver/MissionsAVenir';
-import ProfilDriver from './Pages/Driver/ProfilDriver';
 import HistoriqueMissions from './Pages/Driver/HistoriqueMissions';
 import ManagerProfile from './Pages/Manager/ManagerProfile';
 import ProfilDriver from './Pages/Driver/ProfilDriver'

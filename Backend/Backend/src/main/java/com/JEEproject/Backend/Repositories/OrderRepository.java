@@ -46,8 +46,5 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     @Query("SELECT o FROM Order o WHERE o.client.id_user = :clientId")
     List<Order> findByClientId(@Param("clientId") int clientId);
-<<<<<<< HEAD
 
-=======
->>>>>>> 7aeb38a1638abbc301b259cc0a2178696bbc8e14
 }

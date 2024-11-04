@@ -72,7 +72,7 @@ const GestionColliersMissions = () => {
     const [possibleDrivers,setPossibleDrivers]=useState([])
     const [selectedDriver,setSelectedDriver]=useState(0)
     const [nextStep,setNextStep]=useState("")
-    const [err,setErr]=useState({msg:"",is_created:null})
+    const [err,setErr]=useState({msg:null,is_created:null})
     const handleNextStep=(selectedOrder,tracking_status)=>{
         if(tracking_status==="ProcessingOrder"){
             setPossibleDrivers(availableDrivers.filter((ad)=>ad.driver_type==="In_City"))
@@ -155,6 +155,7 @@ const GestionColliersMissions = () => {
   const handleCloseDrawer = () => {
     setDrawerOpen(false);
     setSelectedOrder(null);
+    setErr({msg:null,is_created:null})
   };
     useEffect(()=>{
         if(ordersTmp!==null)
@@ -195,6 +196,7 @@ const GestionColliersMissions = () => {
                             background: 'linear-gradient(145deg, #ffffff, #f5f5f5)',
                             borderRadius: 5,
                             overflow: 'hidden',
+                            height:"400px"
                         }}
                         >
                         <CardContent sx={{ padding: 3 }}>
@@ -262,7 +264,7 @@ const GestionColliersMissions = () => {
         }
         </div>
         <Drawer anchor="right" open={drawerOpen} onClose={handleCloseDrawer}>
-        <Box sx={{ width: 600, padding: 4, backgroundColor: '#f8f9fa', boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.3)', borderRadius: 2 }}>
+        <Box sx={{width: 600, padding: 4, backgroundColor: '#f8f9fa', boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.3)', borderRadius: 2 }}>
           {selectedOrder && (
             <>
               <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 3, color: '#1E88E5', textAlign: 'center' }}>
@@ -356,14 +358,17 @@ const GestionColliersMissions = () => {
               >
                 Fermer
               </Button>
-              {
-                err.msg!==null?
-                    <p>{err.msg}</p>
-                :null
-              }
             </>
           )}
         </Box>
+        
+            {
+            err.msg!==null?
+                <p style={{marginTop:"20px",padding:"5px",borderRadius:"7px",backgroundColor:err.is_created?"green":"red",width:"75%",marginLeft:"12.5%",textAlign:"center",color:"white"}}>
+                    {err.msg}
+                </p>
+            :null
+            }
       </Drawer>
     </section>
   )
