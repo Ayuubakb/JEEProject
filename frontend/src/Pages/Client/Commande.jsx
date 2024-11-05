@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Box, TextField, MenuItem, Button } from '@mui/material';
+import {
+  Typography,
+  Box,
+  TextField,
+  MenuItem,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from '@mui/material';
 import axios from 'axios';
 
 const cities = ['tanger', 'tetouan', 'rabat', 'casablanca', 'fes', 'marrakech', 'agadir'];
@@ -8,24 +18,26 @@ const Commande = () => {
   const [clientCity, setClientCity] = useState('');
   const userId = localStorage.getItem('userId');
   const token = localStorage.getItem('accessToken');
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const [balance, setBalance] = useState(0);
 
   useEffect(() => {
-    const fetchClientCity = async () => {
+    const fetchClientData = async () => {
       try {
-        const response = await axios.get(
+        const clientResponse = await axios.get(
           `${process.env.REACT_APP_SERVER_URI}/client/get/id/${userId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        console.log('Client response:', response.data.city);
-        setClientCity(response.data.city);
+        setClientCity(clientResponse.data.city);
+        setBalance(clientResponse.data.balance); // Set initial balance
       } catch (error) {
-        console.error("Error fetching client's city:", error);
+        console.error("Error fetching client's data:", error);
       }
     };
 
-    if (userId && token) fetchClientCity();
+    if (userId && token) fetchClientData();
   }, [userId, token]);
 
   const [orderData, setOrderData] = useState({
@@ -53,7 +65,6 @@ const Commande = () => {
     }
   };
 
-  // Calculate price based on weight, cities, and order type
   const calculatePrice = () => {
     const weight = parseFloat(orderData.weight) || 0;
     const receiverCity = orderData.receiver.city;
@@ -61,12 +72,9 @@ const Commande = () => {
     if (weight > 0 && receiverCity) {
       const pricePerKg = receiverCity === clientCity ? 15.0 : 50.0;
       let basePrice = weight * pricePerKg;
-
-      // Add 50 if order type is Express
       if (orderData.orderType === 'Express') {
         basePrice += 50.0;
       }
-
       setPrice(basePrice);
     } else {
       setPrice(0);
@@ -79,20 +87,26 @@ const Commande = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
+
+    if (price > balance) {
+      alert('Insufficient balance for purchase');
+      return;
+    }
+
+    setOpenConfirm(true); // Show confirmation dialog
+  };
+
+  const confirmOrder = async () => {
     const clientId = localStorage.getItem('userId');
     const token = localStorage.getItem('accessToken');
-
     const orderPayload = {
       ...orderData,
       client: { id_user: clientId },
       priority: 0,
-      receiver: {
-        ...orderData.receiver,
-      },
+      receiver: { ...orderData.receiver },
     };
 
     try {
-      // Check if a receiver with the same email already exists
       const existingReceiverResponse = await axios.get(
         `${process.env.REACT_APP_SERVER_URI}/receiver/get/mail/${orderData.receiver.email}`,
         {
@@ -101,9 +115,7 @@ const Commande = () => {
       );
 
       let receiverId;
-
       if (existingReceiverResponse.data && existingReceiverResponse.data.id_receiver) {
-        // Update existing receiver if found
         receiverId = existingReceiverResponse.data.id_receiver;
         await axios.put(
           `${process.env.REACT_APP_SERVER_URI}/receiver/update/${receiverId}`,
@@ -113,7 +125,6 @@ const Commande = () => {
           }
         );
       } else {
-        // Create a new receiver if not found
         const receiverResponse = await axios.post(
           `${process.env.REACT_APP_SERVER_URI}/receiver/save`,
           orderData.receiver,
@@ -125,16 +136,26 @@ const Commande = () => {
         receiverId = receiverResponse.data;
       }
 
-      // Add receiver ID to order payload
       orderPayload.receiver.id_receiver = receiverId;
-
-      // Save the order
       await axios.post(`${process.env.REACT_APP_SERVER_URI}/order/save`, orderPayload, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      alert('Order created successfully');
+
+      // Initiate transaction after order is successfully saved
+      await axios.post(`${process.env.REACT_APP_SERVER_URI}/transactions/save`, null, {
+        params: {
+          amount: price,
+          clientId: clientId,
+          type: 'Purchase',
+        },
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      alert('Order and transaction completed successfully');
+      setOpenConfirm(false);
+      window.location.reload();
     } catch (error) {
-      console.error('Error submitting order:', error);
+      console.error('Error submitting order or transaction:', error);
     }
   };
 
@@ -154,7 +175,6 @@ const Commande = () => {
       >
         Commande
       </Typography>
-      {/* Live price display */}
       <Typography
         variant='h5'
         color='primary'
@@ -255,6 +275,7 @@ const Commande = () => {
           variant='outlined'
           margin='normal'
         />
+
         <Button
           type='submit'
           variant='contained'
@@ -264,14 +285,31 @@ const Commande = () => {
           Submit Order
         </Button>
       </form>
-      {/*responseMessage && (
-        <Typography
-          variant='body1'
-          sx={{ mt: 2, color: 'green' }}
-        >
-          {responseMessage}
-        </Typography>
-      )*/}
+
+      {/* Confirmation Dialog */}
+      <Dialog
+        open={openConfirm}
+        onClose={() => setOpenConfirm(false)}
+      >
+        <DialogTitle>Confirm Order</DialogTitle>
+        <DialogContent>
+          Are you sure you want to proceed with this order for {price.toFixed(2)} MAD?
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setOpenConfirm(false)}
+            color='secondary'
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={confirmOrder}
+            color='primary'
+          >
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

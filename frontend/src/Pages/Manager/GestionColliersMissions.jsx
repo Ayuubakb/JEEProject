@@ -14,6 +14,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getOrders } from '../../Actions/ordersAction';
 
 const GestionColliersMissions = () => {
+    const { enqueueSnackbar } = useSnackbar(); 
+    const [filteredOrders, setFilteredOrders] = useState([]);
     const dispatch=useDispatch()
     const city=useSelector(state=>state.authReducer.user?.city)
     const ordersTmp=useSelector(state=>state.ordersReducers.orders)
@@ -152,8 +154,8 @@ const GestionColliersMissions = () => {
     const handleOpenDrawer = (order) => {
         setSelectedOrder(order);
         setDrawerOpen(true);
-      };
-      
+    };
+    
   const handleCloseDrawer = () => {
     setDrawerOpen(false);
     setSelectedOrder(null);
@@ -170,6 +172,26 @@ const GestionColliersMissions = () => {
     const handleOpenDialog = (orderId) => {
         setOrderToDelete(orderId);
         setDialogOpen(true);
+    };
+    const handleCloseDialog = () => {
+        setDialogOpen(false);
+        setOrderToDelete(null);
+    };
+    const handleDeleteOrder = async () => {
+        try {
+          await axios.delete(
+            `${process.env.REACT_APP_SERVER_URI}/order/delete/${orderToDelete}`,
+            getAuthConfig()
+          );
+          setFilteredOrders(filteredOrders.filter(order => order.idOrder !== orderToDelete));
+          enqueueSnackbar('Commande supprimée avec succès!', { variant: 'success' }); // Afficher message succès
+          dispatch(getOrders(orderFilter))
+          handleCloseDialog();
+          handleCloseDrawer();
+        } catch (error) {
+          enqueueSnackbar('Échec de la suppression de la commande.', { variant: 'error' }); // Afficher message échec
+          console.error('Erreur lors de la suppression de la commande :', error);
+        }
     };
   return (
     <section className='gestionMissions'>
@@ -372,6 +394,35 @@ const GestionColliersMissions = () => {
             :null
             }
       </Drawer>
+      <Dialog
+        open={dialogOpen}
+        onClose={handleCloseDialog}
+      >
+        <DialogTitle sx={{ textAlign: 'center', color: '#d32f2f', fontWeight: 'bold' }}>
+          Confirmer la suppression
+        </DialogTitle>
+        <DialogActions sx={{ justifyContent: 'center', paddingBottom: 3 }}>
+          <Button
+            onClick={handleCloseDialog}
+            color='primary'
+            variant='outlined'
+          >
+            Annuler
+          </Button>
+          <Button
+            onClick={handleDeleteOrder}
+            color='error'
+            variant='contained'
+            sx={{
+              backgroundColor: '#d32f2f',
+              color: 'white',
+              ':hover': { backgroundColor: '#b71c1c' },
+            }}
+          >
+            Supprimer
+          </Button>
+        </DialogActions>
+      </Dialog>
     </section>
   )
 }

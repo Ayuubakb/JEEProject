@@ -24,6 +24,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import SavingsIcon from '@mui/icons-material/Savings';
 import logo from '../../assets/img/brand/COLLIFAST.png';
 import { logout } from '../../Actions/authAction';
+import { BikeScooter } from '@mui/icons-material';
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const dispatch=useDispatch();
@@ -74,6 +75,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       text: 'Missions',
       path: `/manager/${userId}/gestion-colliers-missions`,
       icon: <LocalShippingIcon />,
+    },
+    {
+      text: 'Ajouter Conducteur',
+      path: `/manager/${userId}/add-driver`,
+      icon: <BikeScooter />,
     }
   ];
 

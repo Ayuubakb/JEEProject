@@ -9,7 +9,7 @@ import LandingPage from './Pages/LandingPage';
 import PrivateRoute from './PrivateRoute';
 
 import LayoutClient from './layouts/LayoutClient';
-import GestionCommandes from './Pages/Client/GestionCommandes';
+import GestionCommandes from './Pages/Client/DashboardHome';
 import Commande from './Pages/Client/Commande';
 import SuiviCommande from './Pages/Client/SuiviCommande';
 import Profil from './Pages/Client/Profil';
@@ -21,7 +21,6 @@ import Finances from './Pages/Manager/Finances';
 import GestionUtilisateurs from './Pages/Manager/GestionUtilisateurs';
 import GestionColliersMissions from './Pages/Manager/GestionColliersMissions';
 import SupportManager from './Pages/Manager/Support';
-import SuiviLivraisons from './Pages/Manager/SuiviLivraisons';
 
 import LayoutDriver from './layouts/LayoutDriver';
 import LayoutManager from './layouts/LayoutManager'
@@ -29,6 +28,8 @@ import MissionsAVenir from './Pages/Driver/MissionsAVenir';
 import HistoriqueMissions from './Pages/Driver/HistoriqueMissions';
 import ManagerProfile from './Pages/Manager/ManagerProfile';
 import ProfilDriver from './Pages/Driver/ProfilDriver'
+import AddDriver from './Pages/Manager/AddDriver';
+import { Add } from '@mui/icons-material';
 
 function App() {
   if (window.location.pathname === '/') {
@@ -117,8 +118,8 @@ function App() {
                   element={<SupportManager />}
                 />
                 <Route
-                  path='suivi-livraisons'
-                  element={<SuiviLivraisons />}
+                  path='add-driver'
+                  element={<AddDriver />}
                 />
               </Route>
             </Route>

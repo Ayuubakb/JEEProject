@@ -5,8 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6f266642-be75-43fb-b8e9-1dcffb902848" name="Changes" comment="backend repos">
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Backend/src/main/java/com/JEEproject/Backend/Controllers/MissionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Backend/src/main/java/com/JEEproject/Backend/Controllers/MissionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Backend/src/main/java/com/JEEproject/Backend/Controllers/DriverController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Backend/src/main/java/com/JEEproject/Backend/Controllers/DriverController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Backend/src/main/java/com/JEEproject/Backend/Controllers/TransactionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Backend/src/main/java/com/JEEproject/Backend/Controllers/TransactionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Backend/src/main/java/com/JEEproject/Backend/DTOs/TransactionProjection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Backend/src/main/java/com/JEEproject/Backend/DTOs/TransactionProjection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Backend/src/main/java/com/JEEproject/Backend/Models/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Backend/src/main/java/com/JEEproject/Backend/Models/Transaction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Backend/src/main/java/com/JEEproject/Backend/Repositories/TransactionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Backend/src/main/java/com/JEEproject/Backend/Repositories/TransactionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Backend/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JEEdb.sql" beforeDir="false" afterPath="$PROJECT_DIR$/JEEdb.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.env" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Pages/Client/Commande.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Pages/Client/Commande.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Pages/Client/GestionCommandes.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/Pages/Manager/GestionColliersMissions.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Pages/Manager/GestionColliersMissions.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,30 +55,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Spring Boot.BackendApplication.executor": "Run",
-    "git-widget-placeholder": "backup2",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/ayoub/JEEProject",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.BackendApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;backup2&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/ayoub/JEEProject&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="BackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="Backend" />
@@ -94,7 +106,8 @@
       <updated>1729282742288</updated>
       <workItem from="1729282743325" duration="113877000" />
       <workItem from="1729951557608" duration="101392000" />
-      <workItem from="1730749127689" duration="11726000" />
+      <workItem from="1730749127689" duration="15787000" />
+      <workItem from="1730799164982" duration="2452000" />
     </task>
     <task id="LOCAL-00001" summary="backend repos">
       <option name="closed" value="true" />

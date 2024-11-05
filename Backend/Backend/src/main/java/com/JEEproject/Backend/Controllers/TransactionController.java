@@ -1,9 +1,9 @@
 package com.JEEproject.Backend.Controllers;
 
+import com.JEEproject.Backend.DTOs.TransactionProjection;
 import com.JEEproject.Backend.Enums.TType;
 import com.JEEproject.Backend.Models.Client;
 import com.JEEproject.Backend.Models.Transaction;
-import com.JEEproject.Backend.Projections.TransactionProjection;
 import com.JEEproject.Backend.Repositories.ClientRepository;
 import com.JEEproject.Backend.Repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;

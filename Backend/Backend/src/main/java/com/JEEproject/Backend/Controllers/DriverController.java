@@ -40,15 +40,27 @@ public class DriverController {
     public ResponseEntity<String> addDriver(@RequestBody Driver driver) {
         Boolean mailExists = utils.mailExists(driver.getEmail());
         Optional<Agency> agency;
+
         if (!mailExists) {
             try {
-                agency = agencyRepository.findAgencyByCity(driver.getAgency().getCity());
+                // Retrieve the agency using id_agency directly
+                agency = agencyRepository.findById(driver.getAgency().getId_agency());
             } catch (Exception e) {
                 return new ResponseEntity<>("Something Went Wrong", HttpStatus.INTERNAL_SERVER_ERROR);
             }
+
             if (agency.isEmpty())
                 return new ResponseEntity<>("Agency Not Found", HttpStatus.NOT_FOUND);
-            Driver driverInstance = new Driver(driver.getFirst_name(), driver.getLast_name(), driver.getEmail(), passwordEncoder.encode(driver.getPassword()), driver.getDriver_type(), agency.get());
+
+            Driver driverInstance = new Driver(
+                    driver.getFirst_name(),
+                    driver.getLast_name(),
+                    driver.getEmail(),
+                    passwordEncoder.encode(driver.getPassword()),
+                    driver.getDriver_type(),
+                    agency.get()
+            );
+
             try {
                 driverRepo.save(driverInstance);
             } catch (Exception e) {
@@ -56,8 +68,10 @@ public class DriverController {
             }
             return new ResponseEntity<>("Driver Saved", HttpStatus.CREATED);
         }
+
         return new ResponseEntity<>("Email Already Used", HttpStatus.BAD_REQUEST);
     }
+
 
     @GetMapping("/get/id/{id}")
     public ResponseEntity<DriverDto> getDriverById(@PathVariable int id) {
